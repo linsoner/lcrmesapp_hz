@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/picture_select_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/camera"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_edit_box_blue"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="相机扫描外部二维码"
+            android:textAllCaps="false"
+            android:textColor="@color/blue" />
+
+
+        <Button
+            android:id="@+id/choose_from_album"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_edit_box_blue"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="本地二维码图片识别"
+            android:textAllCaps="false"
+            android:textColor="@color/blue" />
+
+        <Button
+            android:id="@+id/cancel"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/line2"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/frame_fill_blue_2"
+            android:gravity="center"
+            android:text="取消"
+            android:textAllCaps="false"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+</LinearLayout>

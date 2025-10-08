@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.soonfor.repository">
+
+    <!--SD卡读写的权限（如果需要保存音频文件到本地的话）-->
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--读文件权限-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!--相机权限-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!--用于写入缓存数据到扩展存储卡-->
+    <uses-feature android:name="android.hardware.camera2"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+      <activity android:name="com.dingyg.qrcodelib.zxing.CaptureActivity"
+          android:screenOrientation="portrait"/>
+    </application>
+</manifest>
+

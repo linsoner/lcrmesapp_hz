@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- 字体 -->
+    <dimen name="sp_top_title">18sp</dimen>
+    <dimen name="sp_text_sm">12sp</dimen>
+    <dimen name="sp_text_base">14sp</dimen>
+    <dimen name="sp_ext_lg">16sp</dimen>
+
+    <!-- 水平间距 -->
+    <dimen name="dp_space_row_min">5dp</dimen>
+    <dimen name="dp_space_row_sm">8dp</dimen>
+    <dimen name="dp_space_row_base">12dp</dimen>
+    <dimen name="dp_space_row_lg">16dp</dimen>
+
+    <!-- 垂直间距 -->
+    <dimen name="dp_space_col_min">4dp</dimen>
+    <dimen name="dp_space_col_sm">6dp</dimen>
+    <dimen name="dp_space_col_base">10dp</dimen>
+    <dimen name="dp_space_col_lg">14dp</dimen>
+
+    <!-- 输入框高度 -->
+    <dimen name="dp_editbox_hight">30dp</dimen>
+
+    <!-- 圆角尺寸 -->
+    <dimen name="dp_radius">20dp</dimen>
+
+</resources>

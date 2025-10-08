@@ -1,0 +1,85 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+
+    <!-- 弹出输入框 -->
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@drawable/dialogshape</item>
+        <!-- 边框 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 背景透明 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:layout_gravity">center</item>
+        <!-- 模糊 -->
+    </style>
+
+    <style name="my_style_dialog" parent="Theme.AppCompat.Light.Dialog">
+        <!-- 设置自定义布局的背景透明 -->
+        <item name="android:background">#00000000</item>
+        <!-- 设置window背景透明，也就是去边框 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@drawable/bg_round_corner_transparency</item>
+        <!-- 边框 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 背景透明 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <declare-styleable name="qr_ViewfinderView">
+        <attr name="qr_angleColor" format="color" />
+        <attr name="qr_hint" format="string" />
+        <attr name="qr_textHintColor" format="color" />
+        <attr name="qr_errorHint" format="string" />
+        <attr name="qr_textErrorHintColor" format="color" />
+        <attr name="qr_offsetX" format="integer" />
+        <attr name="qr_offsetY" format="integer" />
+        <attr name="qr_showPossiblePoint" format="boolean" />
+    </declare-styleable>
+
+    <style name="ActivityDialogStyle" parent="Theme.AppCompat.NoActionBar">
+        <!--设置dialog的背景-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--设置Dialog的windowFrame框为无-->
+        <item name="android:windowFrame">@null</item>
+        <!--设置无标题-->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否半透明-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--设置窗口内容不覆盖-->
+        <item name="android:windowContentOverlay">@null</item>
+        <!--设置动画-->
+        <item name="android:windowAnimationStyle">@style/DialogScaleAnim</item>
+        <!--背景是否模糊显示-->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="DialogScaleAnim" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/dialog_scale_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/dialog_scale_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/dialog_scale_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/dialog_scale_out</item>
+    </style>
+
+</resources>

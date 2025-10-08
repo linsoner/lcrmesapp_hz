@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_empty"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="30dp">
+    <TextView
+        android:id="@+id/tv_error_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:textSize="@dimen/sp_ext_lg"
+        android:text="~暂无数据~"/>
+    <TextView
+        android:id="@+id/tv_error_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_space_col_sm"
+        android:textColor="@color/text_prompt"
+        android:textSize="@dimen/sp_text_base"/>
+</LinearLayout>

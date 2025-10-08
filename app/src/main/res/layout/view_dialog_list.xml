@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/list_select_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/titleTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_12"
+            android:textAlignment="center"
+            android:text="请选择"/>
+        <com.dyg.siginprint.wiget.textview.ClearEditText
+            android:id="@+id/searchEt"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="40dp">
+        </com.dyg.siginprint.wiget.textview.ClearEditText>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="100">
+        </android.support.v7.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/cancel"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/line2"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/frame_fill_blue_2"
+            android:gravity="center"
+            android:text="取消"
+            android:textAllCaps="false"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+</LinearLayout>
