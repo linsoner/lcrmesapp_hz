@@ -230,18 +230,12 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     //刷新细表和数量
     private void refreshHrecycler(){
         adapter.setData(dataArrayList);
-        //计算总数量
-        numSumTv.setText(clcaQtyCount());
-        totalBoxTv.setText(scanFinishList.size() + "");
+
     }
 
     //计算总数量
     private String clcaQtyCount(){
-        double qty = 0;
-        for(int i = 0 ; i < scanFinishList.size() ; i++){
-            qty = qty + scanFinishList.get(i).getQty();
-        }
-        return qty == 0 ? "" : String.format("%.4f",qty);
+        return  "";
     }
 
     //清空界面 clearDefuatCache 是否需要清理默认缓存，这里的仓库是默认最后一次的结果
@@ -251,11 +245,16 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         scanFinishList.clear();
         dataArrayList.clear();
         if(clearDefuatCache){
-            billType = "";
-            billTypeName = "";
-            billTypeTv.setText("");
+            billType = "M0021";
+            billTypeName = "报工";
+            billTypeTv.setText(billTypeName);
         }
-        Hawk.delete(userCode + HawkKeys.HAWK_CheckScan_temBean);
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat(" HH:mm", Locale.getDefault());
+        sourceNoEt.setTextCt(dateFormat.format(calendar.getTime())
+                + dateFormat2.format(calendar.getTime()),false);
 
         refreshHrecycler();
     }
@@ -301,9 +300,10 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         return;
                     }
                     billType  ="M0021";
-                    //采购单号
                     JSONObject joData = new JSONObject();
                     try {
+                        joData.put("goodQty", totalBoxTv.getText());
+                        joData.put("badQty", numSumTv.getText());
                         joData.put("billType", billType);
                         joData.put("sourceNo" , sourceNoEt.getTextCt());
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
@@ -364,10 +364,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                 }
             }, 300);
             //条码解析
-            if(billType == "" || billType == null){
-                ToastUtil.show(mActivity,"请选择来源单据类型!");
-                return;
-            }
+            billType = "M0021";
             if(sourceNoEt.getTextCt() == "" || sourceNoEt.getTextCt() == null){
                 ToastUtil.show(mActivity,"请输入来源单号!");
                 return;
@@ -444,9 +441,6 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                     billTypeName = bean.getName();
                     billType = bean.getCode();
                     billTypeTv.setText(bean.getName());
-                    //来源单据类型缓存
-                    Hawk.put(userCode + HawkKeys.HAWK_CheckScan_BillType,billType);
-                    Hawk.put(userCode + HawkKeys.HAWK_CheckScan_BillTypeName,billTypeName);
                 }
             }
         });
