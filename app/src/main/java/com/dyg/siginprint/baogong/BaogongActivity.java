@@ -154,8 +154,10 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             }
 
             Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            sourceNoEt.setTextCt(dateFormat.format(calendar.getTime()),false);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat(" HH:mm", Locale.getDefault());
+            sourceNoEt.setTextCt(dateFormat.format(calendar.getTime())
+                    + dateFormat2.format(calendar.getTime()),false);
         }
     }
 
