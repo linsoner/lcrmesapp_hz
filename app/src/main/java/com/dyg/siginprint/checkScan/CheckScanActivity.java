@@ -35,9 +35,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.OnClick;
 
@@ -89,6 +92,8 @@ public class CheckScanActivity extends BaseActivity<PurchasePresenter> implement
     private String billType;
     private String billTypeName;
 
+    private TextView lblSourceNo;
+
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_check_scan;
@@ -116,10 +121,12 @@ public class CheckScanActivity extends BaseActivity<PurchasePresenter> implement
             billTypeTv = findViewById(R.id.billTypeTv);
             sourceNoEt = findViewById(R.id.sourceNoEt);
             totalBoxTv = findViewById(R.id.totalBoxTv);
-            numSumTv = findViewById(R.id.totalBoxTv);
+            numSumTv = findViewById(R.id.numSumTv);
             qrCodeEt = findViewById(R.id.qr_codeEt);
             sourceNoEt.initEditText(0, "", 0, 1, true, this);
             qrCodeEt.initEditText(0, "", 0, 3, true, this);
+
+            lblSourceNo = findViewById(R.id.lblSourceNo);
 
             //初始化表格
             jit_hrecyclerview = findViewById(R.id.jit_hrecyclerview);
@@ -149,6 +156,17 @@ public class CheckScanActivity extends BaseActivity<PurchasePresenter> implement
                     scanSuccessAddList(temPurchaseBean.getScanFinishList().get(i));
                 }
                 refreshHrecycler();
+            }
+
+            if("18".equals(viewId)) //报工
+            {
+                billType = "M0021";
+                lblSourceNo.setText("生产时间");
+                billTypeTv.setText("报工");
+                // 直接设置当前日期和时间
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                sourceNoEt.setTextCt(dateFormat.format(calendar.getTime()),false);
             }
         }
     }
@@ -264,6 +282,12 @@ public class CheckScanActivity extends BaseActivity<PurchasePresenter> implement
                     typeCode = -93;
                 else if("9".equals(viewId)) //生产扫码核对
                     typeCode = -91;
+                else if( "17".equals(viewId)) //开工
+                    typeCode = -91;
+                else if("18".equals(viewId)) //报工
+                {
+                    typeCode = -91;
+                }
                 else if("2".equals(viewId)) //材料扫码核对
                     typeCode = -92;
                 showLoadingDialog();

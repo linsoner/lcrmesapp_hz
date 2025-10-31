@@ -106,6 +106,14 @@
             android:screenOrientation="nosensor"
             android:theme="@style/TranslucentTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+		<activity android:name=".kaigong.KaigongActivity"
+            android:screenOrientation="nosensor"
+            android:theme="@style/TranslucentTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+		<activity android:name=".baogong.BaogongActivity"
+            android:screenOrientation="nosensor"
+            android:theme="@style/TranslucentTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
     </application>
 
 </manifest>

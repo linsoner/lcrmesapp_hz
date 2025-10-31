@@ -16,7 +16,6 @@ import com.dyg.siginprint.R;
 import com.dyg.siginprint.base.model.Tokens;
 import com.dyg.siginprint.base.tools.DoubleClickU;
 import com.dyg.siginprint.base.tools.HawkKeys;
-import com.dyg.siginprint.base.tools.LogUtils;
 import com.dyg.siginprint.base.tools.ToastUtil;
 import com.dyg.siginprint.base.view.BaseActivity;
 import com.dyg.siginprint.login.model.LoginBean;
@@ -26,7 +25,6 @@ import com.dyg.siginprint.purchase.presenter.IPurchaseView;
 import com.dyg.siginprint.purchase.presenter.PurchasePresenter;
 import com.dyg.siginprint.update.ActivityUtils;
 import com.dyg.siginprint.update.CustomDialog;
-import com.dyg.siginprint.wiget.dialog.InputDialog;
 import com.dyg.siginprint.wiget.dialog.ListDialog;
 import com.dyg.siginprint.wiget.dialog.model.BaseDataModel;
 import com.dyg.siginprint.wiget.textview.ClearEditText;
@@ -73,7 +71,6 @@ public class KaigongActivity extends BaseActivity<PurchasePresenter> implements 
 
     //上面为表格配置
 
-
     //组件
     private TextView billTypeTv;//来源单类型
     private ClearEditText sourceNoEt;//来源单号
@@ -100,7 +97,7 @@ public class KaigongActivity extends BaseActivity<PurchasePresenter> implements 
     @Override
     protected void initPresenter() {
         presenter = new PurchasePresenter(KaigongActivity.this,this);
-        initTitle(true, "开工", "", new View.OnClickListener() {
+        initTitle(true, "扫码核对", "", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FinishView();
@@ -136,29 +133,7 @@ public class KaigongActivity extends BaseActivity<PurchasePresenter> implements 
             jit_hrecyclerview.setViewWidth(maxWidth);
 
             adapter = new HRecycleViewAdapter(R.layout.item_hrecycleview, dataArrayList, mMoveViewListID, maxWidth);
-            adapter.onItemClickListener = new HRecycleViewAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(int row,int column) {
-                    LogUtils.e("点击行==" + row + "点击列==" + column);
-                    if(column != 1) return;
-                    InputDialog inputDialog = new InputDialog(mActivity, new InputDialog.Callback() {
-                        @Override
-                        public void finish(Boolean isConfirm, String inputContent) {
-                            double num = 0;
-                            try {
-                                num = Double.parseDouble(inputContent);
-                            } catch (NumberFormatException e) {
-                                System.out.println("字符串格式无效，无法转换为double");
-                                return;
-                            }
-                            scanFinishList.get(row).setQty(num);
-                            dataArrayList.get(row).getHRecycleViewData().set(1,num + "");
-                            refreshHrecycler();
-                        }
-                    });
-                    inputDialog.show("修改第"+ (row + 1) +"行数量",scanFinishList.get(row).getQty()+ "");
-                }
-            };
+
             jit_hrecyclerview.setAdapter(adapter);
 
             //需要在表格初始化之后，使用缓存数据
@@ -268,7 +243,7 @@ public class KaigongActivity extends BaseActivity<PurchasePresenter> implements 
         scanFinishList.clear();
         dataArrayList.clear();
         if(clearDefuatCache){
-            billType = "";
+            billType = "M0020";
             billTypeName = "";
             billTypeTv.setText("");
             Hawk.delete(userCode + HawkKeys.HAWK_CheckScan_BillType);
@@ -283,9 +258,16 @@ public class KaigongActivity extends BaseActivity<PurchasePresenter> implements 
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.billTypeLayoutId:{
-//                //来源单类型
+                //TODO:来源单类型
+                int typeCode = -99;
+                if("8".equals(viewId)) //成品扫码核对
+                    typeCode = -93;
+                else if("9".equals(viewId) || "17".equals(viewId) || "18".equals(viewId)) //生产扫码核对
+                    typeCode = -91;
+                else if("2".equals(viewId)) //材料扫码核对
+                    typeCode = -92;
                 showLoadingDialog();
-                presenter.requestBaseInfo("FormCheck", -93);
+                presenter.requestBaseInfo("FormCheck", typeCode);
             }
             break;
             case R.id.tv_temporary_storage:{
@@ -312,20 +294,32 @@ public class KaigongActivity extends BaseActivity<PurchasePresenter> implements 
             }
             break;
             case R.id.tv_save:{
-                billType ="M0020";
                 //保存
                 if(!DoubleClickU.isFastDoubleClick(R.id.tv_save)){
                     if(scanFinishList.size() == 0){
                         ToastUtil.show(mActivity,"暂无数据，保存无效！",true);
                         return;
                     }
-
+                    billType = "M0020";
+     /*               if(billType == "" || billType == null){
+                        ToastUtil.show(mActivity,"请选择来源单据类型!");
+                        return;
+                    }*/
+                    if(sourceNoEt.getTextCt() == "" || sourceNoEt.getTextCt() == null){
+                        ToastUtil.show(mActivity,"请输入来源单号!");
+                        return;
+                    }
+                    //采购单号
                     JSONObject joData = new JSONObject();
                     try {
+                        joData.put("billType", billType);
+                        joData.put("sourceNo" , sourceNoEt.getTextCt());
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
+                    billType = "M0020";
                     showLoadingDialog();
                     presenter.requestScanResulte("FormCheck",joData);
                 }
@@ -380,14 +374,16 @@ public class KaigongActivity extends BaseActivity<PurchasePresenter> implements 
                 }
             }, 300);
             //条码解析
-            if(billType == "" || billType == null){
+/*            if(billType == "" || billType == null){
                 ToastUtil.show(mActivity,"请选择来源单据类型!");
                 return;
-            }
+            }*/
             if(sourceNoEt.getTextCt() == "" || sourceNoEt.getTextCt() == null){
                 ToastUtil.show(mActivity,"请输入来源单号!");
                 return;
             }
+
+            billType = "M0020";
             //采购单号
             JSONObject joData = new JSONObject();
             try {
@@ -414,10 +410,11 @@ public class KaigongActivity extends BaseActivity<PurchasePresenter> implements 
             QrManager.getInstance().openCamera(mActivity, CODE_SCAN_SOURCENO);
         }else if(etId == 3){
             //供应商和仓库必填
-            if(billType == "" || billType == null){
+            billType = "m0020";
+/*            if(billType == "" || billType == null){
                 ToastUtil.show(mActivity,"请选择来源单据类型!");
                 return;
-            }
+            }*/
             if(sourceNoEt.getTextCt() == "" || sourceNoEt.getTextCt() == null){
                 ToastUtil.show(mActivity,"请输入来源单号!");
                 return;
@@ -456,26 +453,18 @@ public class KaigongActivity extends BaseActivity<PurchasePresenter> implements 
             @Override
             public void selectFinish(Object obj, int position) {
                 BaseDataModel bean = (BaseDataModel) obj;
-                if(code == -99 || code == -93 || code == -92 || code == -91){
+                if(code == -99 || code == -98 || code == -93 || code == -92 || code == -91){
                     billTypeName = bean.getName();
-                    billType = bean.getCode();
+                    billType = "M0020";
                     billTypeTv.setText(bean.getName());
-                    //仓库缓存
+                    //来源单据类型缓存
                     Hawk.put(userCode + HawkKeys.HAWK_CheckScan_BillType,billType);
                     Hawk.put(userCode + HawkKeys.HAWK_CheckScan_BillTypeName,billTypeName);
                 }
             }
         });
 
-        // 筛选
-        List<BaseDataModel> filteredList = new ArrayList<BaseDataModel>();
-        for (Object bd : list) {
-            BaseDataModel bd1 = (BaseDataModel)bd;
-            if ("PRO".equals(bd1.getTypeCode())) {
-                filteredList.add(bd1);
-            }
-        }
-        dialog.show(filteredList,code == -99 ? "选择来源单据类型" : "" , "name", viewId);
+        dialog.show(list,code == -99 ? "选择来源单据类型" : "" , "name", viewId);
         dialog.setGravityBottom();
     }
 

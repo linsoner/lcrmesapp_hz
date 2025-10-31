@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dingyg.qrcodelib.common.QrManager;
@@ -17,16 +16,15 @@ import com.dyg.siginprint.R;
 import com.dyg.siginprint.base.model.Tokens;
 import com.dyg.siginprint.base.tools.DoubleClickU;
 import com.dyg.siginprint.base.tools.HawkKeys;
-import com.dyg.siginprint.base.tools.LogUtils;
 import com.dyg.siginprint.base.tools.ToastUtil;
 import com.dyg.siginprint.base.view.BaseActivity;
 import com.dyg.siginprint.login.model.LoginBean;
 import com.dyg.siginprint.purchase.model.PuechaseModel;
+import com.dyg.siginprint.purchase.model.TemPurchaseBean;
 import com.dyg.siginprint.purchase.presenter.IPurchaseView;
 import com.dyg.siginprint.purchase.presenter.PurchasePresenter;
 import com.dyg.siginprint.update.ActivityUtils;
 import com.dyg.siginprint.update.CustomDialog;
-import com.dyg.siginprint.wiget.dialog.InputDialog;
 import com.dyg.siginprint.wiget.dialog.ListDialog;
 import com.dyg.siginprint.wiget.dialog.model.BaseDataModel;
 import com.dyg.siginprint.wiget.textview.ClearEditText;
@@ -40,8 +38,9 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.OnClick;
 
@@ -75,14 +74,12 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
 
     //上面为表格配置
 
-
     //组件
     private TextView billTypeTv;//来源单类型
-    private EditText dateEt;//日期
-    private EditText timeEt;//时间
+    private ClearEditText sourceNoEt;//来源单号
     private ClearEditText qrCodeEt;//条码
-    private TextView totalBoxTv;//良品数
-    private TextView numSumTv;//不良数
+    private TextView totalBoxTv;//总箱数
+    private TextView numSumTv;//数量合计
 
     private int CODE_SCAN_SOURCENO = 101;//来源单号
     private int CODE_SCAN_QRCODE = 102;//二维码
@@ -97,7 +94,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
 
     @Override
     protected int attachLayoutRes() {
-        return R.layout.activity_check_scan;
+        return R.layout.activity_baogong;
     }
 
     @Override
@@ -120,11 +117,11 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             mActivity = BaogongActivity.this;
             tv = findViewById(R.id.tv);
             billTypeTv = findViewById(R.id.billTypeTv);
-            dateEt = findViewById(R.id.dateEt);
-            timeEt = findViewById(R.id.timeEt);
+            sourceNoEt = findViewById(R.id.sourceNoEt);
             totalBoxTv = findViewById(R.id.totalBoxTv);
-            numSumTv = findViewById(R.id.totalBoxTv);
+            numSumTv = findViewById(R.id.numSumTv);
             qrCodeEt = findViewById(R.id.qr_codeEt);
+            sourceNoEt.initEditText(0, "", 0, 1, true, this);
             qrCodeEt.initEditText(0, "", 0, 3, true, this);
 
             //初始化表格
@@ -139,45 +136,26 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             jit_hrecyclerview.setViewWidth(maxWidth);
 
             adapter = new HRecycleViewAdapter(R.layout.item_hrecycleview, dataArrayList, mMoveViewListID, maxWidth);
-            adapter.onItemClickListener = new HRecycleViewAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(int row,int column) {
-                    LogUtils.e("点击行==" + row + "点击列==" + column);
-                    if(column != 1) return;
-                    InputDialog inputDialog = new InputDialog(mActivity, new InputDialog.Callback() {
-                        @Override
-                        public void finish(Boolean isConfirm, String inputContent) {
-                            double num = 0;
-                            try {
-                                num = Double.parseDouble(inputContent);
-                            } catch (NumberFormatException e) {
-                                System.out.println("字符串格式无效，无法转换为double");
-                                return;
-                            }
-                            scanFinishList.get(row).setQty(num);
-                            dataArrayList.get(row).getHRecycleViewData().set(1,num + "");
-                            refreshHrecycler();
-                        }
-                    });
-                    inputDialog.show("修改第"+ (row + 1) +"行数量",scanFinishList.get(row).getQty()+ "");
-                }
-            };
+
             jit_hrecyclerview.setAdapter(adapter);
 
             //需要在表格初始化之后，使用缓存数据
             //取缓存数据
- /*           billType = Hawk.get(userCode + HawkKeys.HAWK_CheckScan_BillType , null);
-            billTypeName = Hawk.get(userCode + HawkKeys.HAWK_CheckScan_BillTypeName , null);
+            billType = "M0021";
+            billTypeName ="报工";
             billTypeTv.setText(billTypeName);
             TemPurchaseBean temPurchaseBean = Hawk.get(userCode + HawkKeys.HAWK_CheckScan_temBean);
             if(temPurchaseBean != null){
-                sourceNoEt.setTextCt(temPurchaseBean.getSourceNo(),false);
                 totalBoxTv.setText(temPurchaseBean.getScanFinishList().size() + "");
                 for(int i = temPurchaseBean.getScanFinishList().size() - 1 ; i >= 0  ;i--){
                     scanSuccessAddList(temPurchaseBean.getScanFinishList().get(i));
                 }
                 refreshHrecycler();
-            }*/
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            sourceNoEt.setTextCt(dateFormat.format(calendar.getTime()),false);
         }
     }
 
@@ -250,31 +228,33 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     //刷新细表和数量
     private void refreshHrecycler(){
         adapter.setData(dataArrayList);
-/*        //计算总数量
+        //计算总数量
         numSumTv.setText(clcaQtyCount());
-        totalBoxTv.setText(scanFinishList.size() + "");*/
+        totalBoxTv.setText(scanFinishList.size() + "");
     }
 
     //计算总数量
     private String clcaQtyCount(){
-/*        double qty = 0;
+        double qty = 0;
         for(int i = 0 ; i < scanFinishList.size() ; i++){
             qty = qty + scanFinishList.get(i).getQty();
         }
-        return qty == 0 ? "" : String.format("%.4f",qty);*/
-        return "";
+        return qty == 0 ? "" : String.format("%.4f",qty);
     }
 
     //清空界面 clearDefuatCache 是否需要清理默认缓存，这里的仓库是默认最后一次的结果
     private void clearView(boolean clearDefuatCache){
-        Date now = new Date();
-        SimpleDateFormat d2 = new SimpleDateFormat("yyyy/MM/dd");
-        SimpleDateFormat t2 = new SimpleDateFormat("HH:mm");
-        dateEt.setText(d2.format(now));
-        timeEt.setText(t2.format(now));
+        sourceNoEt.setTextCt("",false);
         qrCodeEt.setTextCt("",false);
         scanFinishList.clear();
         dataArrayList.clear();
+        if(clearDefuatCache){
+            billType = "";
+            billTypeName = "";
+            billTypeTv.setText("");
+        }
+        Hawk.delete(userCode + HawkKeys.HAWK_CheckScan_temBean);
+
         refreshHrecycler();
     }
 
@@ -282,9 +262,26 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.billTypeLayoutId:{
-//                //来源单类型
+                //TODO:来源单类型
+                int typeCode = -99;
+                if("8".equals(viewId)) //成品扫码核对
+                    typeCode = -93;
+                else if("9".equals(viewId)) //生产扫码核对
+                    typeCode = -91;
+                else if( "17".equals(viewId)) //开工
+                    typeCode = -91;
+                else if("18".equals(viewId)) //报工
+                {
+                    typeCode = -91;
+                }
+                else if("2".equals(viewId)) //材料扫码核对
+                    typeCode = -92;
                 showLoadingDialog();
-                presenter.requestBaseInfo("FormBaogong", -93);
+                presenter.requestBaseInfo("FormCheck", typeCode);
+            }
+            break;
+            case R.id.tv_temporary_storage:{
+                //暂存
             }
             break;
             case R.id.tv_clearing:{
@@ -301,32 +298,18 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         ToastUtil.show(mActivity,"暂无数据，保存无效！",true);
                         return;
                     }
-                    if(billType == "" || billType == null){
-                        ToastUtil.show(mActivity,"请选择来源单据类型!");
-                        return;
-                    }
-                    if(dateEt.getText().toString() == "" || dateEt.getText() == null){
-                        ToastUtil.show(mActivity,"请输入日期");
-                        return;
-                    }
-                    if(dateEt.getText().toString() == "" || dateEt.getText() == null){
-                        ToastUtil.show(mActivity,"请输入时间");
-                        return;
-                    }
-
+                    billType  ="M0021";
+                    //采购单号
                     JSONObject joData = new JSONObject();
                     try {
                         joData.put("billType", billType);
-                        joData.put("FDate" , dateEt.getText());
-                        joData.put("FTime" , timeEt.getText());
-                        joData.put("Qty2" , numSumTv.getText());
-                        joData.put("Qty1" , totalBoxTv.getText());
+                        joData.put("sourceNo" , sourceNoEt.getTextCt());
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     showLoadingDialog();
-                    presenter.requestScanResulte("FormBaogong",joData);
+                    presenter.requestScanResulte("FormCheck",joData);
                 }
             }
             break;
@@ -360,7 +343,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     public void confirm(int etId, String result) {
         if(etId == 1){
             //来源单号
-            //sourceNoEt.setTextCt(result,true);
+            sourceNoEt.setTextCt(result,true);
             //设置焦点
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -379,15 +362,25 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                 }
             }, 300);
             //条码解析
+            if(billType == "" || billType == null){
+                ToastUtil.show(mActivity,"请选择来源单据类型!");
+                return;
+            }
+            if(sourceNoEt.getTextCt() == "" || sourceNoEt.getTextCt() == null){
+                ToastUtil.show(mActivity,"请输入来源单号!");
+                return;
+            }
+            //采购单号
             JSONObject joData = new JSONObject();
             try {
                 joData.put("qrCode", result);
                 joData.put("billType", billType);
+                joData.put("sourceNo" , sourceNoEt.getTextCt());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             showLoadingDialog();
-            presenter.requestAnalysisQRCode("FormBaogong",joData);
+            presenter.requestAnalysisQRCode("FormCheck",joData);
         }
     }
 
@@ -402,6 +395,15 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             //来源单号
             QrManager.getInstance().openCamera(mActivity, CODE_SCAN_SOURCENO);
         }else if(etId == 3){
+            //供应商和仓库必填
+            if(billType == "" || billType == null){
+                ToastUtil.show(mActivity,"请选择来源单据类型!");
+                return;
+            }
+            if(sourceNoEt.getTextCt() == "" || sourceNoEt.getTextCt() == null){
+                ToastUtil.show(mActivity,"请输入来源单号!");
+                return;
+            }
             QrManager.getInstance().openCamera(mActivity, CODE_SCAN_QRCODE);
         }
     }
@@ -436,23 +438,18 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             @Override
             public void selectFinish(Object obj, int position) {
                 BaseDataModel bean = (BaseDataModel) obj;
-                if(code == -99 || code == -93 || code == -92 || code == -91){
+                if(code == -99 || code == -98 || code == -93 || code == -92 || code == -91){
                     billTypeName = bean.getName();
                     billType = bean.getCode();
                     billTypeTv.setText(bean.getName());
+                    //来源单据类型缓存
+                    Hawk.put(userCode + HawkKeys.HAWK_CheckScan_BillType,billType);
+                    Hawk.put(userCode + HawkKeys.HAWK_CheckScan_BillTypeName,billTypeName);
                 }
             }
         });
 
-        // 筛选
-        List<BaseDataModel> filteredList = new ArrayList<BaseDataModel>();
-        for (Object bd : list) {
-            BaseDataModel bd1 = (BaseDataModel)bd;
-            if ("PRO".equals(bd1.getTypeCode())) {
-                filteredList.add(bd1);
-            }
-        }
-        dialog.show(filteredList,code == -99 ? "选择来源单据类型" : "" , "name", viewId);
+        dialog.show(list,code == -99 ? "选择来源单据类型" : "" , "name", viewId);
         dialog.setGravityBottom();
     }
 
