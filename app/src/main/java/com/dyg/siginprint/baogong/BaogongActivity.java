@@ -92,6 +92,9 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     private String billType;
     private String billTypeName;
 
+    private ClearEditText goodQtyEt;//良品数
+    private ClearEditText badQtyEt;//不良数
+
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_baogong;
@@ -124,6 +127,8 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             sourceNoEt.initEditText(0, "", 0, 1, true, this);
             qrCodeEt.initEditText(0, "", 0, 3, true, this);
 
+            goodQtyEt = findViewById(R.id.goodQtyEt);
+            badQtyEt = findViewById(R.id.badQtyEt);
             //初始化表格
             jit_hrecyclerview = findViewById(R.id.jit_hrecyclerview);
 
@@ -242,6 +247,8 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     private void clearView(boolean clearDefuatCache){
         sourceNoEt.setTextCt("",false);
         qrCodeEt.setTextCt("",false);
+        goodQtyEt.setTextCt("",false);
+        badQtyEt.setTextCt("",false);
         scanFinishList.clear();
         dataArrayList.clear();
         if(clearDefuatCache){
@@ -302,8 +309,8 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                     billType  ="M0021";
                     JSONObject joData = new JSONObject();
                     try {
-                        joData.put("goodQty", totalBoxTv.getText());
-                        joData.put("badQty", numSumTv.getText());
+                        joData.put("goodQty", goodQtyEt.getTextCt());
+                        joData.put("badQty", badQtyEt.getTextCt());
                         joData.put("billType", billType);
                         joData.put("sourceNo" , sourceNoEt.getTextCt());
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
