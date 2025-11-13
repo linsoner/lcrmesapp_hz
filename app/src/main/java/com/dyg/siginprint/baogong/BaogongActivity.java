@@ -94,6 +94,19 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
 
     private ClearEditText goodQtyEt;//良品数
     private ClearEditText badQtyEt;//不良数
+    private ClearEditText foilLengthEt;//正箔实际长度
+    private ClearEditText dateCodeEt;//周期
+
+    private TextView procTv;//工序
+    private String proc;
+    private TextView workerTv;//作业员
+    private String worker;
+    private TextView qcTv;//机修
+    private String qc;
+    private TextView machanicTv;//品管
+    private String machanic;
+    private TextView machineTv;//机台
+    private String machine;
 
     @Override
     protected int attachLayoutRes() {
@@ -129,6 +142,16 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
 
             goodQtyEt = findViewById(R.id.goodQtyEt);
             badQtyEt = findViewById(R.id.badQtyEt);
+            foilLengthEt = findViewById(R.id.foilLengthEt);
+            dateCodeEt = findViewById(R.id.dateCodeEt);
+
+            procTv = findViewById(R.id.procTv);
+            workerTv = findViewById(R.id.workerTv);
+            qcTv = findViewById(R.id.qcTv);
+            machanicTv = findViewById(R.id.machanicTv);
+            machineTv = findViewById(R.id.machineTv);
+
+
             //初始化表格
             jit_hrecyclerview = findViewById(R.id.jit_hrecyclerview);
 
@@ -266,7 +289,8 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         refreshHrecycler();
     }
 
-    @OnClick({R.id.billTypeLayoutId,R.id.tv_temporary_storage,R.id.tv_clearing,R.id.tv_save,R.id.tv_deleteRow})
+    @OnClick({R.id.billTypeLayoutId,R.id.tv_temporary_storage,R.id.tv_clearing,R.id.tv_save,R.id.tv_deleteRow,R.id.procLayoutId
+    ,R.id.workerLayoutId,R.id.machanicLayoutId,R.id.machineLayoutId,R.id.qcLayoutId,})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.billTypeLayoutId:{
@@ -286,19 +310,54 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                     typeCode = -92;
                 showLoadingDialog();
                 presenter.requestBaseInfo("FormCheck", typeCode);
+                break;
             }
-            break;
+            case R.id.procTv:
+            case R.id.procLayoutId:{
+                //工序
+                showLoadingDialog();
+                presenter.requestBaseInfo("FormCheck", -1);
+                break;
+            }
+            case R.id.workerTv:
+            case R.id.workerLayoutId:{
+                //作业员
+                showLoadingDialog();
+                presenter.requestBaseInfo("FormCheck", -86);
+                break;
+            }
+            case R.id.machanicTv:
+            case R.id.machanicLayoutId:{
+                //机修
+                showLoadingDialog();
+                presenter.requestBaseInfo("FormCheck", -85);
+                break;
+            }
+            case R.id.machineTv:
+            case R.id.machineLayoutId:{
+                //机台
+                showLoadingDialog();
+                presenter.requestBaseInfo("FormCheck", -87);
+                break;
+            }
+            case R.id.qcTv:
+            case R.id.qcLayoutId:{
+                //品管
+                showLoadingDialog();
+                presenter.requestBaseInfo("FormCheck", -84);
+                break;
+            }
             case R.id.tv_temporary_storage:{
                 //暂存
+                break;
             }
-            break;
             case R.id.tv_clearing:{
                 //清空 用于清除主表和细表内容，清除暂存，界面恢复到更进入界面的状态。
                 if(!DoubleClickU.isFastDoubleClick(R.id.tv_clearing)){
                     clearView(true);
                 }
+                break;
             }
-            break;
             case R.id.tv_save:{
                 //保存
                 if(!DoubleClickU.isFastDoubleClick(R.id.tv_save)){
@@ -306,6 +365,11 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         ToastUtil.show(mActivity,"暂无数据，保存无效！",true);
                         return;
                     }
+                    if(proc == "" || proc == null){
+                        ToastUtil.show(mActivity,"选择工序!");
+                        return;
+                    }
+
                     billType  ="M0021";
                     JSONObject joData = new JSONObject();
                     try {
@@ -313,6 +377,14 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         joData.put("badQty", badQtyEt.getTextCt());
                         joData.put("billType", billType);
                         joData.put("sourceNo" , sourceNoEt.getTextCt());
+
+                        joData.put("proc" , proc);
+                        joData.put("worker" , worker);
+                        joData.put("qc" , qc);
+                        joData.put("machanic" , machanic);
+                        joData.put("dateCode" , dateCodeEt.getTextCt());
+                        joData.put("foilLength" , foilLengthEt.getTextCt());
+
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -320,16 +392,19 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                     showLoadingDialog();
                     presenter.requestScanResulte("FormCheck",joData);
                 }
+
+                break;
             }
-            break;
+
             case R.id.tv_deleteRow : {
                 if(scanFinishList.size() > 0){
                     scanFinishList.remove(0);
                     dataArrayList.remove(0);
                     refreshHrecycler();
                 }
+                break;
             }
-            break;
+            default : break;
         }
     }
 
@@ -448,6 +523,31 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                     billTypeName = bean.getName();
                     billType = bean.getCode();
                     billTypeTv.setText(bean.getName());
+                }
+                else if(code == -1) {
+                    //工序
+                    proc = bean.getName();
+                    procTv.setText(bean.getName());
+                }
+                else if(code == -87) {
+                    //机台
+                    machine = bean.getCode();
+                    machineTv.setText(bean.getName());
+                }
+                else if(code == -86) {
+                    //作业员
+                    worker = bean.getName();
+                    workerTv.setText(bean.getName());
+                }
+                else if(code == -85) {
+                    //机修
+                    machanic = bean.getName();
+                    machanicTv.setText(bean.getName());
+                }
+                else if(code == -84) {
+                    //品管
+                    qc = bean.getName();
+                    qcTv.setText(bean.getName());
                 }
             }
         });
