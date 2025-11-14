@@ -555,7 +555,7 @@
                 android:textSize="@dimen/sp_text_base" />
 
             <com.dyg.siginprint.wiget.textview.ClearEditText
-                android:id="@+id/dateCodeEt"
+                android:id="@+id/remarkEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
