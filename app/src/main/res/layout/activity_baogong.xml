@@ -545,7 +545,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/lblDateCode"
+                android:id="@+id/lblRemark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 				android:paddingRight="@dimen/dp_space_row_base"

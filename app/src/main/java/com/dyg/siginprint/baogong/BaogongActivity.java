@@ -108,6 +108,8 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     private TextView machineTv;//机台
     private String machine;
 
+    private ClearEditText remarkEt;
+
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_baogong;
@@ -151,6 +153,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             machanicTv = findViewById(R.id.machanicTv);
             machineTv = findViewById(R.id.machineTv);
 
+            remarkEt = findViewById(R.id.remarkEt);
 
             //初始化表格
             jit_hrecyclerview = findViewById(R.id.jit_hrecyclerview);
@@ -181,11 +184,11 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                 refreshHrecycler();
             }
 
-            Calendar calendar = Calendar.getInstance();
+/*            Calendar calendar = Calendar.getInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
             SimpleDateFormat dateFormat2 = new SimpleDateFormat(" HH:mm", Locale.getDefault());
             sourceNoEt.setTextCt(dateFormat.format(calendar.getTime())
-                    + dateFormat2.format(calendar.getTime()),false);
+                    + dateFormat2.format(calendar.getTime()),false);*/
         }
     }
 
@@ -280,11 +283,11 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             billTypeTv.setText(billTypeName);
         }
 
-        Calendar calendar = Calendar.getInstance();
+/*        Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         SimpleDateFormat dateFormat2 = new SimpleDateFormat(" HH:mm", Locale.getDefault());
         sourceNoEt.setTextCt(dateFormat.format(calendar.getTime())
-                + dateFormat2.format(calendar.getTime()),false);
+                + dateFormat2.format(calendar.getTime()),false);*/
 
         refreshHrecycler();
     }
@@ -361,12 +364,16 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             case R.id.tv_save:{
                 //保存
                 if(!DoubleClickU.isFastDoubleClick(R.id.tv_save)){
-                    if(scanFinishList.size() == 0){
+ /*                   if(scanFinishList.size() == 0){
                         ToastUtil.show(mActivity,"暂无数据，保存无效！",true);
                         return;
-                    }
+                    }*/
                     if(proc == "" || proc == null){
                         ToastUtil.show(mActivity,"选择工序!");
+                        return;
+                    }
+                    if(worker == "" || worker == null){
+                        ToastUtil.show(mActivity,"选择作业员!");
                         return;
                     }
 
@@ -379,11 +386,13 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         joData.put("sourceNo" , sourceNoEt.getTextCt());
 
                         joData.put("proc" , proc);
+                        joData.put("machine" , machine);
                         joData.put("worker" , worker);
                         joData.put("qc" , qc);
                         joData.put("machanic" , machanic);
                         joData.put("dateCode" , dateCodeEt.getTextCt());
                         joData.put("foilLength" , foilLengthEt.getTextCt());
+                        joData.put("remark" , remarkEt.getTextCt());
 
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
                     } catch (JSONException e) {
