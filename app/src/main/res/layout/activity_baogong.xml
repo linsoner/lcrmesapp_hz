@@ -97,36 +97,6 @@
             android:paddingLeft="@dimen/dp_space_row_base"
             android:paddingBottom="@dimen/dp_space_col_min"
             android:paddingRight="@dimen/dp_space_row_base"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="扫码"
-                android:textColor="@color/text" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/text"
-                android:textSize="@dimen/sp_text_base"
-                android:text="空空空"
-                android:visibility="invisible"/>
-            <com.dyg.siginprint.wiget.textview.ClearEditText
-                android:id="@+id/qr_codeEt"
-                android:layout_width="wrap_content"
-                android:layout_weight="100"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp_space_row_base"
-            android:paddingBottom="@dimen/dp_space_col_min"
-            android:paddingRight="@dimen/dp_space_row_base"
             android:orientation="horizontal">
 
             <TextView

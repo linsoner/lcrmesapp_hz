@@ -77,9 +77,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     //组件
     private TextView billTypeTv;//来源单类型
     private ClearEditText sourceNoEt;//来源单号
-    private ClearEditText qrCodeEt;//条码
-    private TextView totalBoxTv;//总箱数
-    private TextView numSumTv;//数量合计
+    //private ClearEditText qrCodeEt;//条码
 
     private int CODE_SCAN_SOURCENO = 101;//来源单号
     private int CODE_SCAN_QRCODE = 102;//二维码
@@ -136,11 +134,10 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             tv = findViewById(R.id.tv);
             billTypeTv = findViewById(R.id.billTypeTv);
             sourceNoEt = findViewById(R.id.sourceNoEt);
-            totalBoxTv = findViewById(R.id.totalBoxTv);
-            numSumTv = findViewById(R.id.numSumTv);
-            qrCodeEt = findViewById(R.id.qr_codeEt);
+
+            // qrCodeEt = findViewById(R.id.qr_codeEt);
             sourceNoEt.initEditText(0, "", 0, 1, true, this);
-            qrCodeEt.initEditText(0, "", 0, 3, true, this);
+            // qrCodeEt.initEditText(0, "", 0, 3, true, this);
 
             goodQtyEt = findViewById(R.id.goodQtyEt);
             badQtyEt = findViewById(R.id.badQtyEt);
@@ -175,20 +172,6 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             billType = "M0021";
             billTypeName ="报工";
             billTypeTv.setText(billTypeName);
-            TemPurchaseBean temPurchaseBean = Hawk.get(userCode + HawkKeys.HAWK_CheckScan_temBean);
-            if(temPurchaseBean != null){
-                totalBoxTv.setText(temPurchaseBean.getScanFinishList().size() + "");
-                for(int i = temPurchaseBean.getScanFinishList().size() - 1 ; i >= 0  ;i--){
-                    scanSuccessAddList(temPurchaseBean.getScanFinishList().get(i));
-                }
-                refreshHrecycler();
-            }
-
-/*            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-            SimpleDateFormat dateFormat2 = new SimpleDateFormat(" HH:mm", Locale.getDefault());
-            sourceNoEt.setTextCt(dateFormat.format(calendar.getTime())
-                    + dateFormat2.format(calendar.getTime()),false);*/
         }
     }
 
@@ -272,7 +255,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     //清空界面 clearDefuatCache 是否需要清理默认缓存，这里的仓库是默认最后一次的结果
     private void clearView(boolean clearDefuatCache){
         sourceNoEt.setTextCt("",false);
-        qrCodeEt.setTextCt("",false);
+        // qrCodeEt.setTextCt("",false);
         goodQtyEt.setTextCt("",false);
         badQtyEt.setTextCt("",false);
         dateCodeEt.setTextCt("",false);
@@ -460,11 +443,11 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    qrCodeEt.requestEditFoucs();
+                    goodQtyEt.requestEditFoucs();
                 }
             }, 500);
         }else if(etId == 3){
-            qrCodeEt.setTextCt("",false);
+            /*qrCodeEt.setTextCt("",false);
             //设置焦点
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -489,7 +472,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                 e.printStackTrace();
             }
             showLoadingDialog();
-            presenter.requestAnalysisQRCode("FormCheck",joData);
+            presenter.requestAnalysisQRCode("FormCheck",joData);*/
         }
     }
 
@@ -591,11 +574,11 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         for(int i = 0 ; i < scanFinishList.size() ; i++){
             if(qrModel.getSn().equals(scanFinishList.get(i).getSn())){
                 ToastUtil.show(mActivity,"流水号重复，流水号为[" + qrModel.getSn() + "]",true);
-                qrCodeEt.setTextCt("",true);
+                // qrCodeEt.setTextCt("",true);
                 return;
             }
         }
-        qrCodeEt.setTextCt("",true);
+        // qrCodeEt.setTextCt("",true);
         ifNeedTemStorage = true;
         scanSuccessAddList(qrModel);
         refreshHrecycler();
