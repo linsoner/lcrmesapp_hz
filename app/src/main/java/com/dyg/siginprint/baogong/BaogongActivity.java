@@ -296,8 +296,8 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         refreshHrecycler();
     }
 
-    @OnClick({R.id.billTypeLayoutId,R.id.tv_temporary_storage,R.id.tv_clearing,R.id.tv_save,R.id.tv_deleteRow,R.id.procLayoutId
-    ,R.id.workerLayoutId,R.id.machanicLayoutId,R.id.machineLayoutId,R.id.qcLayoutId,})
+    @OnClick({R.id.billTypeLayoutId,R.id.tv_clearing,R.id.tv_save,R.id.procLayoutId
+    ,R.id.workerLayoutId,R.id.machanicLayoutId,R.id.machineLayoutId,R.id.qcLayoutId})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.billTypeLayoutId:{
@@ -405,7 +405,6 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         joData.put("badQty", badQtyEt.getTextCt());
                         joData.put("billType", billType);
                         joData.put("sourceNo" , sourceNoEt.getTextCt());
-
                         joData.put("ProcessCode" , proc);
                         joData.put("machine" , machine);
                         joData.put("worker" , worker);
@@ -414,7 +413,6 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         joData.put("dateCode" , dateCodeEt.getTextCt());
                         joData.put("foilLength" , foilLengthEt.getTextCt());
                         joData.put("remark" , remarkEt.getTextCt());
-
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
                     } catch (JSONException e) {
                         e.printStackTrace();

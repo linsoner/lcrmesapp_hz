@@ -142,64 +142,8 @@
 
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/goodQtyEt"
-                android:layout_width="134dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/totalBoxTv"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_editbox_hight"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@drawable/bg_edit_box"
-                android:gravity="center_vertical|left"
-                android:minWidth="70dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_editbox_hight"
-                android:paddingLeft="@dimen/dp_space_row_base"
-                android:minWidth="60dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tv_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:layout_marginRight="@dimen/dp_space_row_sm"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/dp_space_row_base"
-                    android:paddingRight="@dimen/dp_space_row_base"
-                    android:textColor="@color/text"
-                    android:textSize="@dimen/sp_text_base"
-                    android:background="@drawable/frame_fill_blue_2"
-                    android:text="保存"/>
-				<TextView
-                    android:id="@+id/tv_temporary_storage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/dp_space_row_sm"
-                    android:background="@drawable/frame_fill_blue_2"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/dp_space_row_base"
-                    android:paddingRight="@dimen/dp_space_row_base"
-                    android:text="暂存"
-                    android:textColor="@color/text"
-                    android:textSize="@dimen/sp_text_base"
-                    tools:visibility="invisible" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp_space_row_base"
-            android:paddingRight="@dimen/dp_space_row_base"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/lblnumSum"
@@ -210,66 +154,14 @@
                 android:textColor="@color/text"
                 android:textSize="@dimen/sp_text_base" />
 
-            <TextView
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:text="*空"
-                android:textColor="@color/text"
-                android:textSize="@dimen/sp_text_base"
-                android:visibility="invisible" />
-
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/badQtyEt"
-                android:layout_width="136dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/numSumTv"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_editbox_hight"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@drawable/bg_edit_box"
-                android:gravity="center_vertical|left"
-                android:minWidth="70dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_editbox_hight"
-                android:paddingLeft="@dimen/dp_space_row_base"
-                android:minWidth="60dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_clearing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/dp_space_row_base"
-                    android:paddingRight="@dimen/dp_space_row_base"
-                    android:textColor="@color/text"
-                    android:textSize="@dimen/sp_text_base"
-                    android:background="@drawable/frame_fill_blue_2"
-                    android:text="清空"/>
-
-                <TextView
-                    android:id="@+id/tv_deleteRow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/frame_fill_blue_2"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/dp_space_row_base"
-                    android:paddingRight="@dimen/dp_space_row_base"
-                    android:text="删除行"
-                    android:textColor="@color/text"
-                    android:textSize="@dimen/sp_text_base"
-                    tools:visibility="invisible" />
-            </LinearLayout>
+            
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -314,7 +206,7 @@
 
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/dateCodeEt"
-                android:layout_width="136dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
@@ -348,7 +240,7 @@
 
                 <LinearLayout
                     android:id="@+id/procLayoutId"
-                    android:layout_width="128dp"
+                    android:layout_width="88dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_edit_box"
                     android:gravity="center"
@@ -395,7 +287,7 @@
                         android:id="@+id/workerTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="100"
+                        android:layout_weight="80"
                         android:paddingLeft="@dimen/dp_6"></TextView>
 
                     <ImageView
@@ -432,7 +324,7 @@
 
         <LinearLayout
             android:id="@+id/machineLayoutId"
-            android:layout_width="128dp"
+            android:layout_width="88dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_edit_box"
             android:gravity="center"
@@ -557,7 +449,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/dp_0.8"
                 android:paddingRight="@dimen/dp_space_row_base"
-                android:text=" 备注"
+                android:text="备注"
                 android:textColor="@color/text"
                 android:textSize="@dimen/sp_text_base" />
 
@@ -567,15 +459,69 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+		
+		<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_space_row_base"
+            android:paddingRight="@dimen/dp_space_row_base"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+
+			<LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_editbox_hight"
+                android:paddingLeft="@dimen/dp_space_row_base"
+                android:minWidth="60dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_marginRight="@dimen/dp_space_row_sm"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/dp_space_row_base"
+                    android:paddingRight="@dimen/dp_space_row_base"
+                    android:textColor="@color/text"
+                    android:textSize="@dimen/sp_text_base"
+                    android:background="@drawable/frame_fill_blue_2"
+                    android:text="保存"/>
+
+            </LinearLayout>
+			
+			<LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_editbox_hight"
+                android:paddingLeft="@dimen/dp_space_row_base"
+                android:minWidth="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_clearing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/dp_space_row_base"
+                    android:paddingRight="@dimen/dp_space_row_base"
+                    android:textColor="@color/text"
+                    android:textSize="@dimen/sp_text_base"
+                    android:background="@drawable/frame_fill_blue_2"
+                    android:text="清空"/>
+
+            </LinearLayout>
+        </LinearLayout>
 
         <com.dyg.siginprint.HRecycleView.HRecyclerView
             android:id="@+id/jit_hrecyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_marginBottom="10dp"
-            android:layout_weight="1000">
-        </com.dyg.siginprint.HRecycleView.HRecyclerView>
+            android:layout_weight="1000"
+            android:gravity="center"
+            android:visibility="invisible"
+            tools:visibility="invisible"></com.dyg.siginprint.HRecycleView.HRecyclerView>
 
         <TextView
             android:id="@+id/tv"
