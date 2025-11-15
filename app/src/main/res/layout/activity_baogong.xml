@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,54 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_12"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingRight="@dimen/dp_12"
-            tools:visibility="visible">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="40"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/dp_14"
-                    android:gravity="center"
-                    android:text="*作业类型"
-                    android:textColor="@color/text"
-                    android:textSize="@dimen/sp_14" />
-
-                <LinearLayout
-                    android:id="@+id/billTypeLayoutId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_edit_box"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/billTypeTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="100"
-                        android:paddingLeft="@dimen/dp_6"></TextView>
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@mipmap/xiangxia" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+			android:paddingTop="@dimen/dp_space_row_base"
             android:paddingLeft="@dimen/dp_space_row_base"
             android:paddingBottom="@dimen/dp_space_col_min"
             android:paddingRight="@dimen/dp_space_row_base"
@@ -112,7 +66,7 @@
 
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/goodQtyEt"
-                android:layout_width="80dp"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -120,13 +74,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="7dp"
                 android:text=" 不良数"
                 android:textColor="@color/text"
                 android:textSize="@dimen/sp_text_base" />
 
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/badQtyEt"
-                android:layout_width="80dp"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content" />
 
             
@@ -146,29 +102,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-				android:paddingRight="@dimen/dp_space_row_base"
+				android:layout_marginRight="7dp"
                 android:text=" 正箔长"
                 android:textColor="@color/text"
                 android:textSize="@dimen/sp_text_base" />
 
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/foilLengthEt"
-                android:layout_width="72dp"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp_space_row_base"
-            android:paddingRight="@dimen/dp_space_row_base"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
-
-            <TextView
+				
+				            <TextView
                 android:id="@+id/lblDateCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-				android:paddingRight="@dimen/dp_space_row_base"
+				android:layout_marginLeft="22dp"
+				android:layout_marginRight="5dp"
                 android:layout_gravity="center_vertical"
                 android:text=" 周期"
                 android:textColor="@color/text"
@@ -176,13 +125,11 @@
 
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/dateCodeEt"
-                android:layout_width="80dp"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-        </LinearLayout>
 		
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -193,7 +140,7 @@
             tools:visibility="visible">
 
             <LinearLayout
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="40"
                 android:orientation="horizontal">
@@ -201,16 +148,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/dp_7"
+                    android:layout_marginRight="@dimen/dp_5"
                     android:gravity="center"
-                    android:paddingRight="@dimen/dp_space_row_base"
+                    android:paddingRight="18dp"
                     android:text="*工序"
                     android:textColor="@color/text"
                     android:textSize="@dimen/sp_14" />
 
                 <LinearLayout
                     android:id="@+id/procLayoutId"
-                    android:layout_width="88dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_edit_box"
                     android:gravity="center"
@@ -218,7 +165,7 @@
 
                     <TextView
                         android:id="@+id/procTv"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="100"
                         android:paddingLeft="@dimen/dp_6"></TextView>
@@ -229,8 +176,20 @@
                         android:src="@mipmap/xiangxia" />
                 </LinearLayout>
             </LinearLayout>
-			
-			<LinearLayout
+        </LinearLayout>
+
+
+
+		<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
+            tools:visibility="visible">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="40"
@@ -239,8 +198,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-					android:paddingRight="@dimen/dp_space_row_base"
+                    android:layout_marginRight="@dimen/dp_5"
                     android:gravity="center"
+                    android:paddingRight="5dp"
                     android:text="*作业员"
                     android:textColor="@color/text"
                     android:textSize="@dimen/sp_14" />
@@ -257,7 +217,7 @@
                         android:id="@+id/workerTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="80"
+                        android:layout_weight="100"
                         android:paddingLeft="@dimen/dp_6"></TextView>
 
                     <ImageView
@@ -267,8 +227,8 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-<LinearLayout
+		
+		<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -277,44 +237,7 @@
             android:paddingRight="@dimen/dp_12"
             tools:visibility="visible">
 
-    <LinearLayout
-        android:layout_width="112dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="40"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingRight="@dimen/dp_space_row_base"
-            android:text="机台号"
-            android:textColor="@color/text"
-            android:textSize="@dimen/sp_14" />
-
-        <LinearLayout
-            android:id="@+id/machineLayoutId"
-            android:layout_width="88dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_edit_box"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/machineTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:paddingLeft="@dimen/dp_6"></TextView>
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/xiangxia" />
-        </LinearLayout>
-    </LinearLayout>
-			
-			<LinearLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="40"
@@ -323,10 +246,57 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_6"
-                    android:layout_marginRight="@dimen/dp_6"
+                    android:layout_marginRight="@dimen/dp_5"
                     android:gravity="center"
-                    android:paddingRight="@dimen/dp_space_row_base"
+                    android:paddingRight="10dp"
+                    android:text="机台号"
+                    android:textColor="@color/text"
+                    android:textSize="@dimen/sp_14" />
+
+                <LinearLayout
+                    android:id="@+id/machineLayoutId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_edit_box"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/machineTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:paddingLeft="@dimen/dp_6"></TextView>
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@mipmap/xiangxia" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+		
+		<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="40"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/dp_5"
+                    android:gravity="center"
+                    android:paddingRight="23dp"
                     android:text="品管"
                     android:textColor="@color/text"
                     android:textSize="@dimen/sp_14" />
@@ -354,8 +324,6 @@
             </LinearLayout>
         </LinearLayout>
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -376,7 +344,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/dp_5"
                     android:gravity="center"
-                    android:paddingRight="@dimen/dp_space_row_base"
+                    android:paddingRight="23dp"
                     android:text="机修"
                     android:textColor="@color/text"
                     android:textSize="@dimen/sp_14" />
@@ -418,7 +386,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/dp_0.8"
-                android:paddingRight="@dimen/dp_space_row_base"
+                android:paddingRight="27dp"
                 android:text="备注"
                 android:textColor="@color/text"
                 android:textSize="@dimen/sp_text_base" />
@@ -442,6 +410,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_editbox_hight"
                 android:paddingLeft="@dimen/dp_space_row_base"
+				android:layout_marginLeft="80dp"
                 android:minWidth="60dp"
                 android:orientation="horizontal">
                 <TextView
@@ -483,17 +452,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.dyg.siginprint.HRecycleView.HRecyclerView
-            android:id="@+id/jit_hrecyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1000"
-            android:gravity="center"
-            android:visibility="invisible"
-            tools:visibility="invisible"></com.dyg.siginprint.HRecycleView.HRecyclerView>
-
-        <TextView
+    <TextView
             android:id="@+id/tv"
             android:layout_width="match_parent"
             android:layout_height="40dp"

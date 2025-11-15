@@ -75,7 +75,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     //上面为表格配置
 
     //组件
-    private TextView billTypeTv;//来源单类型
+    // private TextView billTypeTv;//来源单类型
     private ClearEditText sourceNoEt;//来源单号
     //private ClearEditText qrCodeEt;//条码
 
@@ -132,7 +132,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             userCode = loginBean.getAccount();
             mActivity = BaogongActivity.this;
             tv = findViewById(R.id.tv);
-            billTypeTv = findViewById(R.id.billTypeTv);
+            // billTypeTv = findViewById(R.id.billTypeTv);
             sourceNoEt = findViewById(R.id.sourceNoEt);
 
             // qrCodeEt = findViewById(R.id.qr_codeEt);
@@ -171,7 +171,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             //取缓存数据
             billType = "M0021";
             billTypeName ="报工";
-            billTypeTv.setText(billTypeName);
+            // billTypeTv.setText(billTypeName);
         }
     }
 
@@ -267,41 +267,16 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         if(clearDefuatCache){
             billType = "M0021";
             billTypeName = "报工";
-            billTypeTv.setText(billTypeName);
+            // billTypeTv.setText(billTypeName);
         }
-
-/*        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat(" HH:mm", Locale.getDefault());
-        sourceNoEt.setTextCt(dateFormat.format(calendar.getTime())
-                + dateFormat2.format(calendar.getTime()),false);*/
 
         refreshHrecycler();
     }
 
-    @OnClick({R.id.billTypeLayoutId,R.id.tv_clearing,R.id.tv_save,R.id.procLayoutId
+    @OnClick({R.id.tv_clearing,R.id.tv_save,R.id.procLayoutId
     ,R.id.workerLayoutId,R.id.machanicLayoutId,R.id.machineLayoutId,R.id.qcLayoutId})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.billTypeLayoutId:{
-                //TODO:来源单类型
-                int typeCode = -99;
-                if("8".equals(viewId)) //成品扫码核对
-                    typeCode = -93;
-                else if("9".equals(viewId)) //生产扫码核对
-                    typeCode = -91;
-                else if( "17".equals(viewId)) //开工
-                    typeCode = -91;
-                else if("18".equals(viewId)) //报工
-                {
-                    typeCode = -91;
-                }
-                else if("2".equals(viewId)) //材料扫码核对
-                    typeCode = -92;
-                showLoadingDialog();
-                presenter.requestBaseInfo("FormCheck", typeCode);
-                break;
-            }
             case R.id.procTv:
             case R.id.procLayoutId:{
                 //工序
@@ -407,14 +382,6 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                 break;
             }
 
-            case R.id.tv_deleteRow : {
-                if(scanFinishList.size() > 0){
-                    scanFinishList.remove(0);
-                    dataArrayList.remove(0);
-                    refreshHrecycler();
-                }
-                break;
-            }
             default : break;
         }
     }
@@ -533,7 +500,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                 if(code == -99 || code == -98 || code == -93 || code == -92 || code == -91){
                     billTypeName = bean.getName();
                     billType = bean.getCode();
-                    billTypeTv.setText(bean.getName());
+                    // billTypeTv.setText(bean.getName());
                 }
                 else if(code == -1) {
                     //工序
