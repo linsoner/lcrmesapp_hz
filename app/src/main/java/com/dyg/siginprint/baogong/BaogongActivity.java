@@ -275,6 +275,10 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         qrCodeEt.setTextCt("",false);
         goodQtyEt.setTextCt("",false);
         badQtyEt.setTextCt("",false);
+        dateCodeEt.setTextCt("",false);
+        foilLengthEt.setTextCt("",false);
+        remarkEt.setTextCt("",false);
+        machineTv.setText("");
         scanFinishList.clear();
         dataArrayList.clear();
         if(clearDefuatCache){
@@ -372,8 +376,25 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         ToastUtil.show(mActivity,"选择工序!");
                         return;
                     }
-                    if(worker == "" || worker == null){
+       /*             if(worker == "" || worker == null){
                         ToastUtil.show(mActivity,"选择作业员!");
+                        return;
+                    }*/
+
+                    if(proc != "包装" && proc != "外观"  && proc != "清洗"&&  (machine == "" || machine == null)){
+                        ToastUtil.show(mActivity,"选择机台!");
+                        return;
+                    }
+
+                    if(proc == "钉卷" &&  (foilLengthEt.getTextCt() == "" || foilLengthEt.getTextCt() == null
+                            || foilLengthEt.getTextCt() == "0")){
+                        ToastUtil.show(mActivity,"请输入正箔长度!");
+                        return;
+                    }
+
+                    if(proc == "钉卷" &&  (foilLengthEt.getTextCt() == "" || foilLengthEt.getTextCt() == null
+                            || foilLengthEt.getTextCt() == "0")){
+                        ToastUtil.show(mActivity,"请输入正箔长度!");
                         return;
                     }
 
@@ -385,7 +406,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         joData.put("billType", billType);
                         joData.put("sourceNo" , sourceNoEt.getTextCt());
 
-                        joData.put("proc" , proc);
+                        joData.put("ProcessCode" , proc);
                         joData.put("machine" , machine);
                         joData.put("worker" , worker);
                         joData.put("qc" , qc);
