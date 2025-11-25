@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -107,6 +108,8 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     private String machine;
 
     private ClearEditText remarkEt;
+
+    private String procCode; //工序代号
 
     @Override
     protected int attachLayoutRes() {
@@ -334,10 +337,10 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         ToastUtil.show(mActivity,"选择工序!");
                         return;
                     }
-       /*             if(worker == "" || worker == null){
+                    if(worker == "" || worker == null){
                         ToastUtil.show(mActivity,"选择作业员!");
                         return;
-                    }*/
+                    }
 
                     if(proc != "包装" && proc != "外观"  && proc != "清洗"&&  (machine == "" || machine == null)){
                         ToastUtil.show(mActivity,"选择机台!");
@@ -350,17 +353,44 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         return;
                     }
 
-                    if(proc == "钉卷" &&  (foilLengthEt.getTextCt() == "" || foilLengthEt.getTextCt() == null
-                            || foilLengthEt.getTextCt() == "0")){
-                        ToastUtil.show(mActivity,"请输入正箔长度!");
-                        return;
+                    double foilLength = 0;
+                    if(foilLengthEt.getTextCt() != "" && foilLengthEt.getTextCt() != null){
+                        try {
+                            foilLength = Double.parseDouble(foilLengthEt.getTextCt());
+                        }catch (Exception ex){
+                        //ToastUtil.show(mActivity,"正箔长度必须为数值");
+                        //return;
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    double badqty = 0;
+                    if(badQtyEt.getTextCt() != "" && badQtyEt.getTextCt() != null){
+                        try {
+                            badqty = Double.parseDouble(badQtyEt.getTextCt());
+                        }catch (Exception ex){
+                            //ToastUtil.show(mActivity,"不良数必须为数值");
+                            //return;
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    double goodqty = 0;
+                    if(goodQtyEt.getTextCt() != "" && goodQtyEt.getTextCt() != null){
+                        try {
+                            goodqty = Double.parseDouble(goodQtyEt.getTextCt());
+                        }catch (Exception ex){
+                            //ToastUtil.show(mActivity,"良品数必须为数值");
+                            //return;
+                            ex.printStackTrace();
+                        }
                     }
 
                     billType  ="M0021";
                     JSONObject joData = new JSONObject();
                     try {
-                        joData.put("goodQty", goodQtyEt.getTextCt());
-                        joData.put("badQty", badQtyEt.getTextCt());
+                        joData.put("goodQty", goodqty);
+                        joData.put("badQty", badqty);
                         joData.put("billType", billType);
                         joData.put("sourceNo" , sourceNoEt.getTextCt());
                         joData.put("ProcessCode" , proc);
@@ -369,7 +399,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         joData.put("qc" , qc);
                         joData.put("machanic" , machanic);
                         joData.put("dateCode" , dateCodeEt.getTextCt());
-                        joData.put("foilLength" , foilLengthEt.getTextCt());
+                        joData.put("foilLength" , foilLength);
                         joData.put("remark" , remarkEt.getTextCt());
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
                     } catch (JSONException e) {
@@ -505,6 +535,10 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                 else if(code == -1) {
                     //工序
                     proc = bean.getName();
+                    String procCode1 = bean.getCode();
+                    if(procCode1 != procCode)
+                        clearRelatedFields();
+                    procCode = procCode1;
                     procTv.setText(bean.getName());
                 }
                 else if(code == -87) {
@@ -530,8 +564,40 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             }
         });
 
-        dialog.show(list,code == -99 ? "选择来源单据类型" : "" , "name", viewId);
+        List<BaseDataModel> ls = list;
+        if(code == -87 ||code == -86  ||code == -85 ||code == -84)
+            ls = filterDataByTypeCode(list);
+        dialog.show(ls, code == -99 ? "选择来源单据类型" : "" , "name", viewId);
         dialog.setGravityBottom();
+    }
+
+    private List<BaseDataModel> filterDataByTypeCode(List<BaseDataModel> dataList) {
+        List<BaseDataModel> filteredList = new ArrayList<>();
+        if (TextUtils.isEmpty(procCode) || dataList == null) {
+            return filteredList;
+        }
+
+        for (BaseDataModel model : dataList) {
+            // 假设BaseDataModel有getTypeCode()方法
+            if (procCode.equals(model.getTypeCode())) {
+                filteredList.add(model);
+            }
+        }
+
+        if(filteredList.size() >0)
+            return filteredList;
+        else return dataList;
+    }
+
+    private void clearRelatedFields() {
+        workerTv.setText("");
+        worker = "";
+        qcTv.setText("");
+        qc = "";
+        machanicTv.setText("");
+        machanic = "";
+        machineTv.setText("");
+        machine = "";
     }
 
     @Override
