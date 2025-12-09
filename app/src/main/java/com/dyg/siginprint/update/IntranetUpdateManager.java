@@ -101,7 +101,7 @@ public class IntranetUpdateManager {
      * @return
      */
     public String getLocalVerCode() {
-        String oldVerCode = "0";
+        String oldVerCode = "1.0.0.0";
         PackageManager manager = mContext.getPackageManager();
 
         try {
@@ -109,7 +109,7 @@ public class IntranetUpdateManager {
                     mContext.getPackageName(), 0);
             oldVerCode = info.versionName;
         } catch (Exception e) {
-            oldVerCode = "0";
+            oldVerCode = "1.0.0.0";
         }
 
         return oldVerCode;

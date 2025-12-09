@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -110,6 +111,11 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     private ClearEditText remarkEt;
 
     private String procCode; //工序代号
+    private  String P030 = "P030"; //组立工序代号
+    private  String P090 = "P090"; //套管工序代号
+    private  String P110 = "P110"; //分选工序代号
+    private  String P101 = "P101"; //二次分选工序代号
+    private  String P050 = "P050"; //老化工序代号
 
     @Override
     protected int attachLayoutRes() {
@@ -177,8 +183,6 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             // billTypeTv.setText(billTypeName);
         }
     }
-
-
 
     private void initHR(){
         //3.1 获取标题栏宽度
@@ -565,28 +569,55 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         });
 
         List<BaseDataModel> ls = list;
-        if(code == -87 ||code == -86  ||code == -85 ||code == -84)
-            ls = filterDataByTypeCode(list);
+        if(code == -87 ||code == -86  ||code == -85 ||code == -84) // 机台 作业员  机修  品管
+            ls = filterDataByTypeCode(list, code);
         dialog.show(ls, code == -99 ? "选择来源单据类型" : "" , "name", viewId);
         dialog.setGravityBottom();
     }
 
-    private List<BaseDataModel> filterDataByTypeCode(List<BaseDataModel> dataList) {
+    //按工序过滤
+    private List<BaseDataModel> filterDataByTypeCode(List<BaseDataModel> dataList, int code) {
         List<BaseDataModel> filteredList = new ArrayList<>();
         if (TextUtils.isEmpty(procCode) || dataList == null) {
             return filteredList;
         }
 
         for (BaseDataModel model : dataList) {
-            // 假设BaseDataModel有getTypeCode()方法
-            if (procCode.equals(model.getTypeCode())) {
-                filteredList.add(model);
+            String p = model.getTypeCode();
+
+            // 分选和老化的作业员，机修，品管是一样的
+            if((procCode.equals(P101) || procCode.equals(P110) || procCode.equals(P050)) &&
+                    (code ==-86 || code ==-85 || code ==-84)) {
+                if (p.equals(P050) || p.equals(P101) || p.equals(P110)) {
+                    filteredList.add(model);
+                    continue;
+                }
+            }
+            // 分选和二次分析的机台一样的
+            else if((procCode.equals(P101) || procCode.equals(P110)) &&
+                    (code ==-87)) {
+                if (p.equals(P101) || p.equals(P110)) {
+                    filteredList.add(model);
+                    continue;
+                }
+            }
+            //组立和套管的机修和品管是一样的
+            else if((procCode.equals(P030) || procCode.equals(P090))
+                    && (code ==-85 || code ==-84)
+            ) {
+                if (p.equals(P030) || p.equals(P090)) {
+                    filteredList.add(model);
+                    continue;
+                }
+            }
+            else {
+                if (procCode.equals(p)) {
+                    filteredList.add(model);
+                }
             }
         }
 
-        if(filteredList.size() >0)
-            return filteredList;
-        else return dataList;
+        return filteredList.size() > 0 ? filteredList : dataList;
     }
 
     private void clearRelatedFields() {
