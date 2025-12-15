@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="dp_0.6">0.6dp</dimen>
+    <dimen name="dp_0.8">0.8dp</dimen>
+    <dimen name="grid_expected_size">120dp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+    <dimen name="dp_120">120dp</dimen>
+    <dimen name="dp_100">100dp</dimen>
+    <dimen name="dp_75">75dp</dimen>
+    <dimen name="dp_70">70dp</dimen>
+    <dimen name="dp_50">50dp</dimen>
+    <dimen name="dp_44">44dp</dimen>
+    <dimen name="dp_40">40dp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_26">26dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_14">14dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_7">7dp</dimen>
+    <dimen name="dp_6">6dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
+    <dimen name="dp_0.2">0.2dp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+    <dimen name="sp_15">15sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_13">13sp</dimen>
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_11">11sp</dimen>
+    <dimen name="sp_10">10sp</dimen>
+    <dimen name="jz_start_button_w_h_fullscreen">62dp</dimen>
+    <dimen name="jz_start_button_w_h_normal">45dp</dimen>
+
+    <!-- 重定义fab大小-->
+    <dimen name="design_fab_size_normal" tools:override="true">44dp</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">44dp</dimen>
+    <dimen name="fab_margin">0dp</dimen>
+</resources>

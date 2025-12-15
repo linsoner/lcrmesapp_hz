@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- android:radius 弧形的半径 -->
+    <corners
+        android:topLeftRadius="0dp"
+        android:bottomLeftRadius="0dp"
+        android:topRightRadius="3dip"
+        android:radius="0dip" />
+    <!-- 边框的宽度和颜色颜色 -->
+    <stroke
+        android:width="0.3dp"
+        android:color="@color/text_gray" />
+    <!-- 背景色 -->
+    <solid android:color="#cccccc"></solid>
+
+</shape>

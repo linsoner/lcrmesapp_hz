@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/rl_depart_top"
+        layout="@layout/view_title_layout"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_alignParentTop="true"
+        android:background="#D2D2D2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvServerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_space_row_base"
+            android:layout_marginRight="@dimen/dp_space_row_min"
+            android:gravity="center_vertical"
+            android:text="服务器："
+            android:textColor="@color/text" />
+
+        <com.dyg.siginprint.wiget.textview.ClearEditText
+            android:id="@+id/et_sj_server_address"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:inputType="text"
+            android:textSize="@dimen/sp_text_base" />
+
+        <ImageButton
+            android:id="@+id/ibt_sj_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@color/transparent"
+            android:src="@mipmap/icon_scan" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_save"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="@dimen/dp_space_row_base"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="@dimen/dp_space_row_base"
+        android:background="@drawable/frame_fill_blue_6"
+        android:text="保  存"
+        android:textSize="@dimen/sp_text_base"
+        android:textColor="@color/white"
+        style="?android:attr/borderlessButtonStyle" />
+
+</LinearLayout>

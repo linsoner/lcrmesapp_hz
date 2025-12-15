@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button_bg_white"
+        android:orientation="vertical"
+        android:padding="1dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+        <LinearLayout
+            android:id="@+id/llfContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="3dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginBottom="26dp"
+            >
+            <LinearLayout
+                android:id="@+id/titlecontent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button_bg_white"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/message_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text"
+                    android:textAlignment="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/selectcontent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="false"
+            android:layout_below="@+id/llfContent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#eeeeee"
+                tools:ignore="Suspicious0dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/alertdialog_left_selector"
+                    android:gravity="center"
+                    android:textColor="#B8B8B8"
+                    android:textSize="16sp"
+                    android:text="取消"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/img_line"
+                    android:layout_width="0.5dp"
+                    android:layout_height="43dp"
+                    android:background="#B8B8B8"
+                    android:visibility="gone"/>
+
+                <Button
+                    android:id="@+id/save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/alertdialog_right_selector"
+                    android:gravity="center"
+                    android:textColor="@color/blue"
+                    android:textSize="14sp"
+                    android:text="关闭"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
