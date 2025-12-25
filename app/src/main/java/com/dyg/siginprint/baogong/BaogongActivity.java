@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -96,6 +97,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     private ClearEditText badQtyEt;//不良数
     private ClearEditText foilLengthEt;//正箔实际长度
     private ClearEditText dateCodeEt;//周期
+    private ClearEditText timesEt;//周期
 
     private TextView procTv;//工序
     private String proc;
@@ -149,16 +151,21 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             // qrCodeEt.initEditText(0, "", 0, 3, true, this);
 
             goodQtyEt = findViewById(R.id.goodQtyEt);
+            goodQtyEt.setInputType(InputType.TYPE_CLASS_NUMBER);
             badQtyEt = findViewById(R.id.badQtyEt);
+            badQtyEt.setInputType(InputType.TYPE_CLASS_NUMBER);
             foilLengthEt = findViewById(R.id.foilLengthEt);
+            foilLengthEt.setInputType(InputType.TYPE_CLASS_NUMBER);
             dateCodeEt = findViewById(R.id.dateCodeEt);
+            dateCodeEt.setInputType(InputType.TYPE_CLASS_NUMBER);
 
             procTv = findViewById(R.id.procTv);
             workerTv = findViewById(R.id.workerTv);
             qcTv = findViewById(R.id.qcTv);
             machanicTv = findViewById(R.id.machanicTv);
             machineTv = findViewById(R.id.machineTv);
-
+            timesEt = findViewById(R.id.timesEt);
+            timesEt.setInputType(InputType.TYPE_CLASS_NUMBER);
             remarkEt = findViewById(R.id.remarkEt);
 
             //初始化表格
@@ -269,6 +276,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         foilLengthEt.setTextCt("",false);
         remarkEt.setTextCt("",false);
         machineTv.setText("");
+        timesEt.setTextCt("1", false);
         scanFinishList.clear();
         dataArrayList.clear();
         if(clearDefuatCache){
@@ -390,6 +398,15 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         }
                     }
 
+                    int times = 1;
+                    if(timesEt.getTextCt() != "" && timesEt.getTextCt() != null){
+                        try {
+                            times = Integer.parseInt(timesEt.getTextCt());
+                        }catch (Exception ex){
+                            ex.printStackTrace();
+                        }
+                    }
+
                     billType  ="M0021";
                     JSONObject joData = new JSONObject();
                     try {
@@ -404,6 +421,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         joData.put("machanic" , machanic);
                         joData.put("dateCode" , dateCodeEt.getTextCt());
                         joData.put("foilLength" , foilLength);
+                        joData.put("times" , times);
                         joData.put("remark" , remarkEt.getTextCt());
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
                     } catch (JSONException e) {
@@ -575,49 +593,67 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         dialog.setGravityBottom();
     }
 
-    //按工序过滤
+    /**
+     * 按工序过滤，将符合条件的记录排在前面，不符合条件的排在后面（保留所有数据）
+     * @param dataList 原始数据列表
+     * @param code 筛选编码
+     * @return 重新排序后的列表（符合条件在前，不符合在后）
+     */
     private List<BaseDataModel> filterDataByTypeCode(List<BaseDataModel> dataList, int code) {
-        List<BaseDataModel> filteredList = new ArrayList<>();
-        if (TextUtils.isEmpty(procCode) || dataList == null) {
-            return filteredList;
+        // 分离符合条件和不符合条件的列表
+        List<BaseDataModel> matchedList = new ArrayList<>();
+        List<BaseDataModel> unmatchedList = new ArrayList<>();
+
+        // 空值处理
+        if (TextUtils.isEmpty(procCode) || dataList == null || dataList.isEmpty()) {
+            return dataList == null ? new ArrayList<>() : dataList;
         }
 
         for (BaseDataModel model : dataList) {
             String p = model.getTypeCode();
+            boolean isMatched = false;
 
             // 分选和老化的作业员，机修，品管是一样的
             if((procCode.equals(P101) || procCode.equals(P110) || procCode.equals(P050)) &&
                     (code ==-86 || code ==-85 || code ==-84)) {
                 if (p.equals(P050) || p.equals(P101) || p.equals(P110)) {
-                    filteredList.add(model);
-                    continue;
+                    isMatched = true;
                 }
             }
             // 分选和二次分析的机台一样的
-            else if((procCode.equals(P101) || procCode.equals(P110)) &&
-                    (code ==-87)) {
+            else if((procCode.equals(P101) || procCode.equals(P110)) && (code ==-87)) {
                 if (p.equals(P101) || p.equals(P110)) {
-                    filteredList.add(model);
-                    continue;
+                    isMatched = true;
                 }
             }
-            //组立和套管的机修和品管是一样的
-            else if((procCode.equals(P030) || procCode.equals(P090))
-                    && (code ==-85 || code ==-84)
-            ) {
+            // 组立和套管的机修和品管是一样的
+            else if((procCode.equals(P030) || procCode.equals(P090)) && (code ==-85 || code ==-84)) {
                 if (p.equals(P030) || p.equals(P090)) {
-                    filteredList.add(model);
-                    continue;
+                    isMatched = true;
                 }
             }
+            // 基础匹配规则
             else {
                 if (procCode.equals(p)) {
-                    filteredList.add(model);
+                    isMatched = true;
                 }
+            }
+
+            // 根据匹配结果分类
+            if (isMatched) {
+                matchedList.add(model);
+            } else {
+                unmatchedList.add(model);
             }
         }
 
-        return filteredList.size() > 0 ? filteredList : dataList;
+        // 合并列表：符合条件的在前，不符合的在后
+        List<BaseDataModel> resultList = new ArrayList<>();
+        resultList.addAll(matchedList);
+        if(code !=-87)
+            resultList.addAll(unmatchedList);
+
+        return resultList;
     }
 
     private void clearRelatedFields() {
@@ -658,7 +694,8 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     @Override
     public void requestFail(int stautsCode, int code, String msg) {
         closeLoadingDialog();
-        ToastUtil.show(mActivity,msg,false);
+        if(code != 1001 && !msg.contains("保存成功") )
+            ToastUtil.show(mActivity,msg,false);
     }
 
     Dialog backDialog = null;

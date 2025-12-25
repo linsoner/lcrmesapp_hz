@@ -54,5 +54,20 @@
             android:textSize="@dimen/sp_text_base"
             android:textColor="@color/white"
             style="?android:attr/borderlessButtonStyle"/>
+			
+		<Button
+            android:id="@+id/btn_direct_download_apk"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@drawable/frame_fill_blue_6"
+			android:layout_marginTop="20dp"
+            android:text="更新"
+            android:textSize="@dimen/sp_text_base"
+            android:textColor="@color/white"
+            style="?android:attr/borderlessButtonStyle"/>
+			
+
     </LinearLayout>
+	
+
 </RelativeLayout>

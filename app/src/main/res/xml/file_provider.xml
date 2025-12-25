@@ -6,4 +6,13 @@
     <external-path
         name="*"
         path="SiginPrintApk" />
+
+    <!-- 匹配下载的APK路径（外部存储Download目录） -->
+    <external-path
+        name="external_download"
+        path="Download/"/>
+    <!-- 兼容其他路径（可选） -->
+    <external-files-path
+        name="external_files"
+        path="."/>
 </paths>

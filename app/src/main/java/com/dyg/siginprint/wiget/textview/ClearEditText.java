@@ -42,6 +42,13 @@ public class ClearEditText extends LinearLayout {
     boolean ifCanScan = false;//是否可以扫码
     boolean showClear = true;//是否需要一键清空
 
+    // 添加设置输入类型的方法
+    public void setInputType(int type) {
+        if (et_input != null) {
+            et_input.setInputType(type);
+        }
+    }
+
     public ClearEditText(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         View view = View.inflate(context, R.layout.view_clear_edittext, this);

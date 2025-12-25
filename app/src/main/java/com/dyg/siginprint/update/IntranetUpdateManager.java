@@ -52,7 +52,7 @@ public class IntranetUpdateManager {
     public static final int INSTALL_PACKAGES_REQUESTCODE = 10013;
     private Activity mContext;
     private String[] url;
-    private String apkName = "QMesApp.apk";
+    private String apkName = "app-release.apk";
     private Dialog downloadDialog; // 下载进度对话
     private ProgressBar mProgressBar; // 进度
     private Boolean interceptFlag = false; // 标记用户是否在下载过程中取消下载

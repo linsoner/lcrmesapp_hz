@@ -67,7 +67,8 @@
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/goodQtyEt"
                 android:layout_width="90dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" 
+				android:inputType="number"/>
 
             <TextView
                 android:id="@+id/lblnumSum"
@@ -78,12 +79,14 @@
                 android:layout_marginRight="7dp"
                 android:text=" 不良数"
                 android:textColor="@color/text"
-                android:textSize="@dimen/sp_text_base" />
+                android:textSize="@dimen/sp_text_base"
+				/>
 
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/badQtyEt"
                 android:layout_width="90dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" 
+				android:inputType="number"/>
 
             
         </LinearLayout>
@@ -105,12 +108,14 @@
 				android:layout_marginRight="7dp"
                 android:text=" 正箔长"
                 android:textColor="@color/text"
-                android:textSize="@dimen/sp_text_base" />
+                android:textSize="@dimen/sp_text_base" 
+				android:inputType="number"/>
 
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/foilLengthEt"
                 android:layout_width="90dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" 
+				android:inputType="number"/>
 				
 				            <TextView
                 android:id="@+id/lblDateCode"
@@ -126,7 +131,8 @@
             <com.dyg.siginprint.wiget.textview.ClearEditText
                 android:id="@+id/dateCodeEt"
                 android:layout_width="90dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" 
+				android:inputType="number"/>
 
         </LinearLayout>
 		
@@ -371,6 +377,35 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+		
+		<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_space_row_base"
+            android:paddingRight="@dimen/dp_space_row_base"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lblTimes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/dp_0.8"
+                android:paddingRight="27dp"
+                android:text="老化/分析/外观次数"
+                android:textColor="@color/text"
+                android:textSize="@dimen/sp_text_base" />
+
+            <com.dyg.siginprint.wiget.textview.ClearEditText
+                android:id="@+id/timesEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" 
+				android:inputType="number"
+				android:text="1"/>
+
+        </LinearLayout>
+		
 
         <LinearLayout
             android:layout_width="match_parent"
