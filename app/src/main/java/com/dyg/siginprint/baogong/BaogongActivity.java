@@ -9,7 +9,9 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dingyg.qrcodelib.common.QrManager;
 import com.dyg.siginprint.HRecycleView.HRecyclerView;
@@ -110,7 +112,14 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     private TextView machineTv;//机台
     private String machine;
 
-    private ClearEditText remarkEt;
+    private TextView badReason1Tv;//不良项1
+    private TextView badReason2Tv;//不良项2
+    private TextView badReason3Tv;//不良项3
+    private ClearEditText badQty1Et;//不良数1
+    private ClearEditText badQty2Et;//不良数2
+    private ClearEditText badQty3Et;//不良数3
+
+    private EditText remarkEt;
 
     private String procCode; //工序代号
     private  String P030 = "P030"; //组立工序代号
@@ -137,6 +146,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        ToastUtil.show(mActivity, "焦点变化:QQQQ" , true);
         LoginBean loginBean = Hawk.get(Tokens.LoginBean, null);
         if (loginBean == null) finish();
         else {
@@ -154,6 +164,23 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             goodQtyEt.setInputType(InputType.TYPE_CLASS_NUMBER);
             badQtyEt = findViewById(R.id.badQtyEt);
             badQtyEt.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+            badQty1Et = findViewById(R.id.badQty1Et);
+            badQty1Et.initEditText(0, "不良数1", 0, 98,
+                    false, this);
+            badQty1Et.setInputType(InputType.TYPE_CLASS_NUMBER);
+            badQty2Et = findViewById(R.id.badQty2Et);
+            badQty2Et.initEditText(0, "不良数2", 0, 99,
+                    false, this);
+            badQty2Et.setInputType(InputType.TYPE_CLASS_NUMBER);
+            badQty3Et = findViewById(R.id.badQty3Et);
+            badQty3Et.initEditText(0, "不良数3", 0, 97,
+                    false, this);
+            badQty3Et.setInputType(InputType.TYPE_CLASS_NUMBER);
+            badReason1Tv = findViewById(R.id.badReason1Tv);
+            badReason2Tv = findViewById(R.id.badReason2Tv);
+            badReason3Tv = findViewById(R.id.badReason3Tv);
+
             foilLengthEt = findViewById(R.id.foilLengthEt);
             foilLengthEt.setInputType(InputType.TYPE_CLASS_NUMBER);
             dateCodeEt = findViewById(R.id.dateCodeEt);
@@ -189,6 +216,40 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             billTypeName ="报工";
             // billTypeTv.setText(billTypeName);
         }
+    }
+
+    /**
+     * 处理不良数添加到备注的逻辑
+     * 只有在备注为空时才会自动添加不良数信息，并包含工序信息
+     */
+    private void handleBadQtyToRemark() {
+        // 如果没有选择工序，也不添加
+        if (TextUtils.isEmpty(proc)) {
+            return;
+        }
+        String badQtyText = badQtyEt.getTextCt();
+        if (TextUtils.isEmpty(badQtyText) || "0".equals(badQtyText)) {
+            return;
+        }
+
+        try {
+            if(proc.equals("钉卷")) {
+                remarkEt.setText("露箔，跑纸，高低脚，偏芯，跑胶带，外径大，抽芯");
+            }
+            else if(proc.equals("组立")) {
+                remarkEt.setText("弯脚，封口不良，偏芯，外径大");
+            }
+            else if(proc.equals("套管")) {
+                remarkEt.setText("套管打折，露白，弯脚，裸品高低不一");
+            }
+            else if(proc.equals("老化")) {
+                remarkEt.setText("漏电，重选，未老化，损失，阻抗，低容");
+            }
+        } catch (Exception e) {
+            Log.e("BadQty", "设置备注错误: " + e.getMessage());
+        }
+
+        //Log.d("Debug", "=== handleBadQtyToRemark 结束 ===");
     }
 
     private void initHR(){
@@ -274,7 +335,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         badQtyEt.setTextCt("",false);
         dateCodeEt.setTextCt("",false);
         foilLengthEt.setTextCt("",false);
-        remarkEt.setTextCt("",false);
+        remarkEt.setText("");
         machineTv.setText("");
         timesEt.setTextCt("1", false);
         scanFinishList.clear();
@@ -289,7 +350,11 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
     }
 
     @OnClick({R.id.tv_clearing,R.id.tv_save,R.id.procLayoutId
-    ,R.id.workerLayoutId,R.id.machanicLayoutId,R.id.machineLayoutId,R.id.qcLayoutId})
+    ,R.id.workerLayoutId,R.id.machanicLayoutId,R.id.machineLayoutId,R.id.qcLayoutId
+            ,R.id.badReason1LayoutId, R.id.badReason1Tv,
+            R.id.badReason2LayoutId, R.id.badReason2Tv,
+            R.id.badReason3LayoutId, R.id.badReason3Tv
+    })
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.procTv:
@@ -297,6 +362,27 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                 //工序
                 showLoadingDialog();
                 presenter.requestBaseInfo("FormCheck", -1);
+                break;
+            }
+            case R.id.badReason1LayoutId:
+            case R.id.badReason1Tv:{
+                //不良项目
+                showLoadingDialog();
+                presenter.requestBaseInfo("FormCheck", -83);
+                break;
+            }
+            case R.id.badReason2LayoutId:
+            case R.id.badReason2Tv:{
+                //不良项目
+                showLoadingDialog();
+                presenter.requestBaseInfo("FormCheck", -82);
+                break;
+            }
+            case R.id.badReason3LayoutId:
+            case R.id.badReason3Tv:{
+                //不良项目
+                showLoadingDialog();
+                presenter.requestBaseInfo("FormCheck", -81);
                 break;
             }
             case R.id.workerTv:
@@ -341,32 +427,29 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
             case R.id.tv_save:{
                 //保存
                 if(!DoubleClickU.isFastDoubleClick(R.id.tv_save)){
- /*                   if(scanFinishList.size() == 0){
-                        ToastUtil.show(mActivity,"暂无数据，保存无效！",true);
-                        return;
-                    }*/
-                    if(proc == "" || proc == null){
-                        ToastUtil.show(mActivity,"选择工序!");
+                    if(proc.isEmpty() || proc == null){
+                        ToastUtil.show(mActivity,"请选择工序!");
                         return;
                     }
-                    if(worker == "" || worker == null){
-                        ToastUtil.show(mActivity,"选择作业员!");
+                    if(worker.isEmpty() || worker == null){
+                        ToastUtil.show(mActivity,"请选择作业员!");
                         return;
                     }
 
-                    if(proc != "包装" && proc != "外观"  && proc != "清洗"&&  (machine == "" || machine == null)){
-                        ToastUtil.show(mActivity,"选择机台!");
+                    if(!"包装".equals(proc) && !"外观".equals(proc) && !"清洗".equals(proc)
+                            && (machine == null || machine.isEmpty())){
+                        ToastUtil.show(mActivity, proc + "工序需要选择机台!");
                         return;
                     }
 
-                    if(proc == "钉卷" &&  (foilLengthEt.getTextCt() == "" || foilLengthEt.getTextCt() == null
+                    if(proc.equals("钉卷") &&  (foilLengthEt.getTextCt() == null || foilLengthEt.getTextCt().isEmpty()
                             || foilLengthEt.getTextCt() == "0")){
                         ToastUtil.show(mActivity,"请输入正箔长度!");
                         return;
                     }
 
                     double foilLength = 0;
-                    if(foilLengthEt.getTextCt() != "" && foilLengthEt.getTextCt() != null){
+                    if(!foilLengthEt.getTextCt().isEmpty() && foilLengthEt.getTextCt() != null){
                         try {
                             foilLength = Double.parseDouble(foilLengthEt.getTextCt());
                         }catch (Exception ex){
@@ -377,7 +460,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                     }
 
                     double badqty = 0;
-                    if(badQtyEt.getTextCt() != "" && badQtyEt.getTextCt() != null){
+                    if(!badQtyEt.getTextCt().isEmpty() && badQtyEt.getTextCt() != null){
                         try {
                             badqty = Double.parseDouble(badQtyEt.getTextCt());
                         }catch (Exception ex){
@@ -387,8 +470,39 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         }
                     }
 
+                    int badqty1 = 0;
+                    if(!badQty1Et.getTextCt().isEmpty() && badQty1Et.getTextCt() != null){
+                        try {
+                            badqty1 = Integer.parseInt(badQty1Et.getTextCt());
+                        }catch (Exception ex){
+                            //ToastUtil.show(mActivity,"不良数1必须为数值");
+                            //return;
+                            ex.printStackTrace();
+                        }
+                    }
+                    int badqty2 = 0;
+                    if(!badQty2Et.getTextCt().isEmpty() && badQty2Et.getTextCt() != null){
+                        try {
+                            badqty2 = Integer.parseInt(badQty2Et.getTextCt());
+                        }catch (Exception ex){
+                            //ToastUtil.show(mActivity,"不良数1必须为数值");
+                            //return;
+                            ex.printStackTrace();
+                        }
+                    }
+                    int badqty3 = 0;
+                    if(!badQty3Et.getTextCt().isEmpty() && badQty3Et.getTextCt() != null){
+                        try {
+                            badqty3 = Integer.parseInt(badQty3Et.getTextCt());
+                        }catch (Exception ex){
+                            //ToastUtil.show(mActivity,"不良数1必须为数值");
+                            //return;
+                            ex.printStackTrace();
+                        }
+                    }
+
                     double goodqty = 0;
-                    if(goodQtyEt.getTextCt() != "" && goodQtyEt.getTextCt() != null){
+                    if(!goodQtyEt.getTextCt().isEmpty() && goodQtyEt.getTextCt() != null){
                         try {
                             goodqty = Double.parseDouble(goodQtyEt.getTextCt());
                         }catch (Exception ex){
@@ -399,19 +513,24 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                     }
 
                     int times = 1;
-                    if(timesEt.getTextCt() != "" && timesEt.getTextCt() != null){
+                    if(!timesEt.getTextCt().isEmpty() && timesEt.getTextCt() != null){
                         try {
                             times = Integer.parseInt(timesEt.getTextCt());
                         }catch (Exception ex){
                             ex.printStackTrace();
                         }
                     }
-
                     billType  ="M0021";
                     JSONObject joData = new JSONObject();
                     try {
                         joData.put("goodQty", goodqty);
                         joData.put("badQty", badqty);
+                        joData.put("badQty1", badqty1);
+                        joData.put("badQty2", badqty2);
+                        joData.put("badQty3", badqty3);
+                        joData.put("badReason1" , badReason1Tv.getText());
+                        joData.put("badReason2" , badReason2Tv.getText());
+                        joData.put("badReason3" , badReason3Tv.getText());
                         joData.put("billType", billType);
                         joData.put("sourceNo" , sourceNoEt.getTextCt());
                         joData.put("ProcessCode" , proc);
@@ -422,7 +541,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         joData.put("dateCode" , dateCodeEt.getTextCt());
                         joData.put("foilLength" , foilLength);
                         joData.put("times" , times);
-                        joData.put("remark" , remarkEt.getTextCt());
+                        joData.put("remark" , remarkEt.getText());
                         joData.put("Labels" ,  new JSONArray(new Gson().toJson(scanFinishList)));
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -562,6 +681,8 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                         clearRelatedFields();
                     procCode = procCode1;
                     procTv.setText(bean.getName());
+
+                    handleBadQtyToRemark();
                 }
                 else if(code == -87) {
                     //机台
@@ -583,11 +704,25 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
                     qc = bean.getName();
                     qcTv.setText(bean.getName());
                 }
+                else if(code == -83) {
+                    //不良项目1
+                    badReason1Tv.setText(bean.getName());
+                }
+                else if(code == -82) {
+                    //不良项目2
+                    badReason2Tv.setText(bean.getName());
+                }
+                else if(code == -81) {
+                    //不良项目3
+                    badReason3Tv.setText(bean.getName());
+                }
             }
         });
 
         List<BaseDataModel> ls = list;
-        if(code == -87 ||code == -86  ||code == -85 ||code == -84) // 机台 作业员  机修  品管
+        if(code == -87 ||code == -86  ||code == -85 ||code == -84 || code == -83 || code == -82
+                || code == -81)
+            // 机台 作业员  机修  品管 不良项目2 不良项目2
             ls = filterDataByTypeCode(list, code);
         dialog.show(ls, code == -99 ? "选择来源单据类型" : "" , "name", viewId);
         dialog.setGravityBottom();
@@ -612,14 +747,41 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         for (BaseDataModel model : dataList) {
             String p = model.getTypeCode();
             boolean isMatched = false;
-
+            if(code == -83 || code ==-82 || code ==-81)
+            {
+                //钉卷
+                if(procCode.equals("P010")) {
+                    if (p.equals("P17")) {
+                        isMatched = true;
+                    }
+                }
+                //组立
+                else if(procCode.equals(P030)) {
+                    if (p.equals("P20")) {
+                        isMatched = true;
+                    }
+                }
+                //套管
+                else if(procCode.equals(P090)) {
+                    if (p.equals("P21")) {
+                        isMatched = true;
+                    }
+                }
+                //老化
+                else if(procCode.equals(P050) || procCode.equals(P110)) {
+                    if (p.equals("P65")) {
+                        isMatched = true;
+                    }
+                }
+            }
             // 分选和老化的作业员，机修，品管是一样的
-            if((procCode.equals(P101) || procCode.equals(P110) || procCode.equals(P050)) &&
+            else if((procCode.equals(P101) || procCode.equals(P110) || procCode.equals(P050)) &&
                     (code ==-86 || code ==-85 || code ==-84)) {
                 if (p.equals(P050) || p.equals(P101) || p.equals(P110)) {
                     isMatched = true;
                 }
             }
+
             // 分选和二次分析的机台一样的
             else if((procCode.equals(P101) || procCode.equals(P110)) && (code ==-87)) {
                 if (p.equals(P101) || p.equals(P110)) {
@@ -650,7 +812,7 @@ public class BaogongActivity extends BaseActivity<PurchasePresenter> implements 
         // 合并列表：符合条件的在前，不符合的在后
         List<BaseDataModel> resultList = new ArrayList<>();
         resultList.addAll(matchedList);
-        if(code !=-87)
+        if(code !=-87 && code != -83 && code != -82 && code != -81)
             resultList.addAll(unmatchedList);
 
         return resultList;

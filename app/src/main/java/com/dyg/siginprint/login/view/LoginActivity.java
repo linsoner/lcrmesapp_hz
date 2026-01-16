@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,58 +49,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements ILogi
     private LoginBean loginBean;
 
     private ApkDownloadInstallUtils mApkUtils;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        // 初始化下载工具类
-        mApkUtils = new ApkDownloadInstallUtils(this);
-        // 设置下载监听
-        mApkUtils.setOnDownloadListener(new ApkDownloadInstallUtils.OnDownloadListener() {
-            @Override
-            public void onDownloadStart() {
-                // 可选：下载开始的UI提示
-            }
-
-            @Override
-            public void onDownloadComplete() {
-                Toast.makeText(LoginActivity.this, "下载完成，正在安装", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onInstallStart() {
-                // 可选：安装开始的提示
-            }
-
-            @Override
-            public void onInstallFailed(String reason) {
-                Toast.makeText(LoginActivity.this, "安装失败：" + reason, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNeedStoragePermission() {
-                // 申请存储权限
-                ActivityCompat.requestPermissions(LoginActivity.this,
-                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        ApkDownloadInstallUtils.REQUEST_STORAGE_PERMISSION);
-            }
-
-            @Override
-            public void onNeedInstallPermission(Intent intent) {
-                // 跳转到安装权限设置页
-                startActivityForResult(intent, ApkDownloadInstallUtils.REQUEST_INSTALL_PERMISSION);
-            }
-        });
-
-        // 绑定下载按钮点击事件
-        findViewById(R.id.btn_direct_download_apk).setOnClickListener(v -> {
-            // 拼接下载地址（和MainActivity逻辑一致）
-            String downloadUrl = getApkDownloadUrl();
-            // 开始下载
-            mApkUtils.startDownload(downloadUrl);
-        });
-    }
 
     /**
      * 拼接APK下载地址（复用项目原有逻辑）
@@ -170,6 +119,73 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements ILogi
             viewPassword.setTextCt(saveLoginBean.getPassword(), false);
             viewAccount.setTextCt(saveLoginBean.getAccount(), true);
         }
+
+        // 初始化下载工具类
+        mApkUtils = new ApkDownloadInstallUtils(this);
+        // 设置下载监听
+        mApkUtils.setOnDownloadListener(new ApkDownloadInstallUtils.OnDownloadListener() {
+            @Override
+            public void onDownloadStart() {
+                // 可选：下载开始的UI提示
+            }
+
+            @Override
+            public void onDownloadComplete() {
+                Toast.makeText(LoginActivity.this, "下载完成，正在安装", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onInstallStart() {
+                // 可选：安装开始的提示
+            }
+
+            @Override
+            public void onInstallFailed(String reason) {
+                Toast.makeText(LoginActivity.this, "安装失败：" + reason, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNeedStoragePermission() {
+                // 申请存储权限
+                ActivityCompat.requestPermissions(LoginActivity.this,
+                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        ApkDownloadInstallUtils.REQUEST_STORAGE_PERMISSION);
+            }
+
+            @Override
+            public void onNeedInstallPermission(Intent intent) {
+                // 跳转到安装权限设置页
+                startActivityForResult(intent, ApkDownloadInstallUtils.REQUEST_INSTALL_PERMISSION);
+            }
+        });
+
+
+        // 绑定下载按钮点击事件
+        findViewById(R.id.btn_direct_download_apk).setOnClickListener(v -> {
+            // 拼接下载地址（和MainActivity逻辑一致）
+            String downloadUrl = getApkDownloadUrl();
+            // 开始下载
+            mApkUtils.startDownload(downloadUrl);
+        });
+
+        // 设置版本号显示
+        setVersionInfo();
+    }
+
+    /**
+     * 设置版本信息显示
+     */
+    private void setVersionInfo() {
+        try {
+            TextView tvVersion = findViewById(R.id.tv_version);
+            String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            tvVersion.setText(String.format("版本号：%s (Build %d)", versionName, versionCode));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            TextView tvVersion = findViewById(R.id.tv_version);
+            tvVersion.setText("版本号：");
+        }
     }
 
 
@@ -177,9 +193,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements ILogi
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_login:
-                if (!DoubleClickU.isFastDoubleClick(R.id.bt_login)) {
+                // if (!DoubleClickU.isFastDoubleClick(R.id.bt_login)) {
                     login();
-                }
+                // }
                 break;
         }
     }

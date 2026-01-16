@@ -45,6 +45,9 @@ public class ClearEditText extends LinearLayout {
     // 添加设置输入类型的方法
     public void setInputType(int type) {
         if (et_input != null) {
+            if(InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE == type
+            || InputType.TYPE_TEXT_FLAG_MULTI_LINE == type)
+                et_input.setSingleLine(false);
             et_input.setInputType(type);
         }
     }
@@ -136,7 +139,13 @@ public class ClearEditText extends LinearLayout {
             et_input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }else if (intType == 1) {
             et_input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        }else {
+        } else if (intType == 3) {
+        // 多行文本输入
+        et_input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        et_input.setSingleLine(false); // 重要：设置为多行
+        et_input.setMaxLines(10); // 设置最大行数
+        et_input.setVerticalScrollBarEnabled(true); // 启用垂直滚动条
+    }else {
             et_input.setInputType(InputType.TYPE_CLASS_TEXT);
         }
         et_input.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -172,6 +181,7 @@ public class ClearEditText extends LinearLayout {
     //设置最小高度
     public void setMinHeigth(Context context, int minHeight) {
         ll_input.setMinimumHeight(CommUtil.dip2px(context, minHeight));
+        et_input.setMinHeight(CommUtil.dip2px(context, minHeight));
     }
 
     //设置背景
@@ -207,6 +217,14 @@ public class ClearEditText extends LinearLayout {
 
     public void requestEditFoucs() {
         if (et_input != null) et_input.requestFocus();
+    }
+
+    public void setMaxLines(int i) {
+        et_input.setMaxLines(i);
+    }
+
+    public void setLines(int i) {
+        et_input.setLines(i);
     }
 
 
